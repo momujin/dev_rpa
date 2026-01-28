@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPA練習用 ECサイトモック＆販売管理システム 演習マニュアル</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'メイリオ', Meiryo, sans-serif;
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #333;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20mm;
+      background: white;
+    }
+
+    h1 {
+      font-size: 20pt;
+      color: #1a365d;
+      text-align: center;
+      margin-bottom: 10mm;
+      padding-bottom: 5mm;
+      border-bottom: 3px solid #2563eb;
+    }
+
+    h2 {
+      font-size: 14pt;
+      color: #1e40af;
+      margin-top: 10mm;
+      margin-bottom: 5mm;
+      padding: 3mm 5mm;
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      color: #1e3a8a;
+      margin-top: 6mm;
+      margin-bottom: 3mm;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-bottom: 3mm;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4mm 0 6mm 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid #d1d5db;
+      padding: 2.5mm 3mm;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    code {
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      font-size: 9pt;
+      background: #f1f5f9;
+      padding: 1mm 2mm;
+      border-radius: 2px;
+      color: #0f172a;
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 4mm;
+      border-radius: 3mm;
+      overflow-x: auto;
+      font-size: 9pt;
+      line-height: 1.6;
+      margin: 4mm 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 3mm;
+      padding: 4mm;
+      margin: 4mm 0;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 3mm;
+      padding: 4mm;
+      margin: 4mm 0;
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 6mm;
+      height: 6mm;
+      background: #2563eb;
+      color: white;
+      text-align: center;
+      line-height: 6mm;
+      border-radius: 50%;
+      font-size: 9pt;
+      font-weight: bold;
+      margin-right: 2mm;
+    }
+
+    ul, ol {
+      margin: 3mm 0 3mm 8mm;
+    }
+
+    li {
+      margin-bottom: 2mm;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .toc {
+      background: #f8fafc;
+      padding: 5mm;
+      border-radius: 3mm;
+      margin-bottom: 8mm;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 3mm;
+    }
+
+    .toc ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc li {
+      padding: 1.5mm 0;
+      border-bottom: 1px dotted #d1d5db;
+    }
+
+    .toc li:last-child {
+      border-bottom: none;
+    }
+
+    .header-info {
+      text-align: center;
+      color: #6b7280;
+      font-size: 10pt;
+      margin-bottom: 8mm;
+    }
+
+    .footer {
+      margin-top: 15mm;
+      padding-top: 5mm;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 9pt;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      h2 {
+        page-break-after: avoid;
+      }
+
+      table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>RPA練習用<br>ECサイトモック＆販売管理システム<br>演習マニュアル</h1>
+
+  <div class="header-info">
+    <p>Version 1.0 | 作成日: 2026年1月28日</p>
+  </div>
+
+  <div class="toc">
+    <h3>目次</h3>
+    <ul>
+      <li>1. システム概要</li>
+      <li>2. 環境構築・起動方法</li>
+      <li>3. 演習1: CSVダウンロード → インポート</li>
+      <li>4. 演習2: CSV読み取り → フォーム転記</li>
+      <li>5. 演習3: 複数ECサイトの一括処理</li>
+      <li>6. 演習4: 注文ステータス更新</li>
+      <li>7. RPA対応属性一覧</li>
+      <li>8. サンプルデータ一覧</li>
+    </ul>
+  </div>
+
+  <h2>1. システム概要</h2>
+
+  <p>本システムは、RPAツールの操作練習用として、ECサイトから出力された注文データをローカルの販売管理システムに転記するフローをシミュレートする環境です。</p>
+
+  <h3>対応ECサイト</h3>
+  <table>
+    <tr>
+      <th>ECサイト</th>
+      <th>モック画面</th>
+      <th>テーマカラー</th>
+      <th>CSV形式</th>
+    </tr>
+    <tr>
+      <td>楽天RMS</td>
+      <td>店舗運営Navi風</td>
+      <td>#BF0000（赤）</td>
+      <td>約40カラム</td>
+    </tr>
+    <tr>
+      <td>Amazon</td>
+      <td>セラーセントラル風</td>
+      <td>#FF9900（オレンジ）</td>
+      <td>約30カラム</td>
+    </tr>
+    <tr>
+      <td>Yahoo!</td>
+      <td>ストアクリエイター風</td>
+      <td>#FF0033（赤）</td>
+      <td>注文+商品明細の2ファイル</td>
+    </tr>
+  </table>
+
+  <h3>プロジェクト構成</h3>
+  <pre><code>dev_rpa/
+├── package.json                 # ルートパッケージ
+├── mock-ec-site/                # モックECサイト
+│   ├── index.html               # トップページ（サイト選択）
+│   ├── css/                     # 各サイトのスタイル
+│   ├── js/                      # データ生成・CSV出力
+│   ├── rakuten/                 # 楽天RMS風画面
+│   ├── amazon/                  # Amazonセラセン風画面
+│   └── yahoo/                   # Yahoo!ストクリ風画面
+├── sales-management/            # 販売管理システム（Electron）
+│   ├── main.js                  # メインプロセス
+│   ├── preload.js               # セキュアIPC
+│   └── renderer/                # UI
+└── sample-data/                 # サンプルCSVデータ</code></pre>
+
+  <div class="page-break"></div>
+
+  <h2>2. 環境構築・起動方法</h2>
+
+  <h3>前提条件</h3>
+  <ul>
+    <li>Node.js v18以上がインストールされていること</li>
+    <li>npmが使用可能であること</li>
+  </ul>
+
+  <h3>インストール</h3>
+  <pre><code>cd /Users/juumonjikouta/dev_web/dev_rpa
+npm run install:all</code></pre>
+
+  <h3>起動コマンド</h3>
+  <table>
+    <tr>
+      <th>コマンド</th>
+      <th>説明</th>
+      <th>アクセス先</th>
+    </tr>
+    <tr>
+      <td><code>npm run dev</code></td>
+      <td>両方同時起動（推奨）</td>
+      <td>Web + Electron</td>
+    </tr>
+    <tr>
+      <td><code>npm run start:web</code></td>
+      <td>モックサイトのみ</td>
+      <td>http://localhost:8080</td>
+    </tr>
+    <tr>
+      <td><code>npm run start:app</code></td>
+      <td>販売管理システムのみ</td>
+      <td>Electronアプリ</td>
+    </tr>
+  </table>
+
+  <div class="info-box">
+    <strong>ポイント:</strong> <code>npm run dev</code> を実行すると、モックECサイト（ブラウザ）と販売管理システム（Electron）が同時に起動します。
+  </div>
+
+  <h2>3. 演習1: CSVダウンロード → インポート</h2>
+
+  <h3>目的</h3>
+  <p>基本的なWeb操作とデスクトップアプリ操作の習得</p>
+
+  <h3>操作手順</h3>
+  <table>
+    <tr>
+      <th>Step</th>
+      <th>操作内容</th>
+      <th>対象要素（ID/属性）</th>
+    </tr>
+    <tr>
+      <td><span class="step-number">1</span></td>
+      <td>http://localhost:8080 をブラウザで開く</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td><span class="step-number">2</span></td>
+      <td>「楽天RMS」カードをクリック</td>
+      <td><code>#link-rakuten</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">3</span></td>
+      <td>ナビゲーションで「データ分析」をクリック</td>
+      <td><code>#nav-download</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">4</span></td>
+      <td>期間を「過去7日間」に設定</td>
+      <td><code>[data-rpa-field="date-range"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">5</span></td>
+      <td>出力件数を「20件」に設定</td>
+      <td><code>[data-rpa-field="order-count"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">6</span></td>
+      <td>「更新」ボタンでプレビュー生成</td>
+      <td><code>#btn-refresh-preview</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">7</span></td>
+      <td>「CSVダウンロード」ボタンをクリック</td>
+      <td><code>#btn-download-csv</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">8</span></td>
+      <td>販売管理システムで「CSVインポート」を選択</td>
+      <td><code>#nav-import</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">9</span></td>
+      <td>インポート形式を「楽天RMS形式」に設定</td>
+      <td><code>[data-rpa-field="import-format"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">10</span></td>
+      <td>「参照...」でダウンロードしたCSVを選択</td>
+      <td><code>#btn-select-file</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">11</span></td>
+      <td>「インポート実行」をクリック</td>
+      <td><code>#btn-import</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">12</span></td>
+      <td>インポート完了を確認</td>
+      <td><code>[data-status="success"]</code></td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2>4. 演習2: CSV読み取り → フォーム転記</h2>
+
+  <h3>目的</h3>
+  <p>CSVファイルのデータを1件ずつ手動入力フォームに転記する操作の習得</p>
+
+  <h3>シナリオ</h3>
+  <p>ダウンロードしたCSVファイルをRPAツールで読み込み、販売管理システムの注文入力フォームに1行ずつデータを入力して保存します。</p>
+
+  <h3>入力フォームの要素一覧</h3>
+  <table>
+    <tr>
+      <th>項目</th>
+      <th>data-rpa-field属性</th>
+      <th>入力タイプ</th>
+    </tr>
+    <tr>
+      <td>注文番号</td>
+      <td><code>order-id</code></td>
+      <td>テキスト（必須）</td>
+    </tr>
+    <tr>
+      <td>注文日</td>
+      <td><code>order-date</code></td>
+      <td>日付（必須）</td>
+    </tr>
+    <tr>
+      <td>ECサイト</td>
+      <td><code>ec-site</code></td>
+      <td>セレクト（必須）</td>
+    </tr>
+    <tr>
+      <td>ステータス</td>
+      <td><code>status</code></td>
+      <td>セレクト</td>
+    </tr>
+    <tr>
+      <td>決済方法</td>
+      <td><code>payment-method</code></td>
+      <td>セレクト</td>
+    </tr>
+    <tr>
+      <td>顧客名</td>
+      <td><code>customer-name</code></td>
+      <td>テキスト（必須）</td>
+    </tr>
+    <tr>
+      <td>顧客名カナ</td>
+      <td><code>customer-kana</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>郵便番号</td>
+      <td><code>postal-code</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>電話番号</td>
+      <td><code>phone</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>メールアドレス</td>
+      <td><code>email</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>住所</td>
+      <td><code>address</code></td>
+      <td>テキスト（必須）</td>
+    </tr>
+    <tr>
+      <td>商品コード</td>
+      <td><code>item-code-0</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>商品名</td>
+      <td><code>item-name-0</code></td>
+      <td>テキスト</td>
+    </tr>
+    <tr>
+      <td>数量</td>
+      <td><code>item-quantity-0</code></td>
+      <td>数値</td>
+    </tr>
+    <tr>
+      <td>単価</td>
+      <td><code>item-price-0</code></td>
+      <td>数値</td>
+    </tr>
+    <tr>
+      <td>送料</td>
+      <td><code>shipping-fee</code></td>
+      <td>数値</td>
+    </tr>
+    <tr>
+      <td>消費税</td>
+      <td><code>tax</code></td>
+      <td>数値</td>
+    </tr>
+    <tr>
+      <td>合計金額</td>
+      <td><code>total</code></td>
+      <td>数値</td>
+    </tr>
+  </table>
+
+  <h3>操作フロー</h3>
+  <ol>
+    <li>RPAツールでCSVファイルを読み込む</li>
+    <li>販売管理システムで「注文入力」画面を開く（<code>#nav-input</code>）</li>
+    <li>CSVの各行をループ処理
+      <ul>
+        <li>各フィールドにデータを入力</li>
+        <li>「保存する」ボタンをクリック（<code>#btn-save</code>）</li>
+        <li><code>[data-status="success"]</code> を検知して完了確認</li>
+        <li>次の行へ</li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <h2>5. 演習3: 複数ECサイトの一括処理</h2>
+
+  <h3>目的</h3>
+  <p>条件分岐とループ処理を組み合わせた複雑なワークフローの習得</p>
+
+  <h3>シナリオ</h3>
+  <p>楽天・Amazon・Yahoo!の3サイトからそれぞれCSVをダウンロードし、販売管理システムに一括インポートします。</p>
+
+  <h3>フローチャート</h3>
+  <pre><code>開始
+  │
+  ├─→ サイトリスト = [楽天, Amazon, Yahoo]
+  │
+  └─→ 各サイトに対して繰り返し:
+        │
+        ├─→ サイト選択画面を開く (http://localhost:8080)
+        │
+        ├─→ 対象サイトのリンクをクリック
+        │     ├─ 楽天: #link-rakuten
+        │     ├─ Amazon: #link-amazon
+        │     └─ Yahoo: #link-yahoo
+        │
+        ├─→ CSVダウンロード画面へ移動
+        │     ├─ 楽天: #nav-download → download.html
+        │     ├─ Amazon: #nav-reports → reports.html
+        │     └─ Yahoo: #nav-download → download.html
+        │
+        ├─→ ダウンロード条件を設定
+        │
+        ├─→ CSVダウンロード実行
+        │
+        ├─→ 販売管理システムでインポート
+        │     └─ インポート形式を適切に選択
+        │
+        └─→ 次のサイトへ
+  │
+終了</code></pre>
+
+  <h3>各サイトのCSVダウンロードボタン</h3>
+  <table>
+    <tr>
+      <th>サイト</th>
+      <th>ダウンロードボタンID</th>
+      <th>インポート形式</th>
+    </tr>
+    <tr>
+      <td>楽天</td>
+      <td><code>#btn-download-csv</code></td>
+      <td>楽天RMS形式</td>
+    </tr>
+    <tr>
+      <td>Amazon</td>
+      <td><code>#btn-download-csv</code></td>
+      <td>Amazon形式</td>
+    </tr>
+    <tr>
+      <td>Yahoo</td>
+      <td><code>#btn-download-order</code> / <code>#btn-download-item</code></td>
+      <td>Yahoo形式</td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2>6. 演習4: 注文ステータス更新</h2>
+
+  <h3>目的</h3>
+  <p>検索 → 詳細確認 → データ更新のフローの習得</p>
+
+  <h3>シナリオ</h3>
+  <p>「新規受付」ステータスの注文を検索し、内容を確認した上で「処理中」に更新します。</p>
+
+  <h3>操作手順</h3>
+  <table>
+    <tr>
+      <th>Step</th>
+      <th>操作内容</th>
+      <th>対象要素</th>
+    </tr>
+    <tr>
+      <td><span class="step-number">1</span></td>
+      <td>注文一覧画面を開く</td>
+      <td><code>#nav-list</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">2</span></td>
+      <td>ステータスで「新規受付」を選択</td>
+      <td><code>[data-rpa-field="search-status"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">3</span></td>
+      <td>検索ボタンをクリック</td>
+      <td><code>#btn-search</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">4</span></td>
+      <td>検索結果の1件目の「詳細」をクリック</td>
+      <td><code>[data-rpa-field="detail-btn-0"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">5</span></td>
+      <td>モーダルで「編集」をクリック</td>
+      <td><code>#btn-modal-edit</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">6</span></td>
+      <td>ステータスを「処理中」に変更</td>
+      <td><code>[data-rpa-field="status"]</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">7</span></td>
+      <td>「保存する」をクリック</td>
+      <td><code>#btn-save</code></td>
+    </tr>
+    <tr>
+      <td><span class="step-number">8</span></td>
+      <td>完了確認（自動的に一覧画面に戻る）</td>
+      <td><code>[data-status="success"]</code></td>
+    </tr>
+  </table>
+
+  <div class="warning-box">
+    <strong>注意:</strong> 検索結果が複数ある場合は、ループ処理で全件更新することも可能です。その場合、更新後に再度検索を実行して次の対象を取得してください。
+  </div>
+
+  <div class="page-break"></div>
+
+  <h2>7. RPA対応属性一覧</h2>
+
+  <h3>要素識別用属性</h3>
+  <table>
+    <tr>
+      <th>属性</th>
+      <th>用途</th>
+      <th>例</th>
+    </tr>
+    <tr>
+      <td><code>id</code></td>
+      <td>要素の一意識別子</td>
+      <td><code>btn-download-csv</code>, <code>nav-input</code></td>
+    </tr>
+    <tr>
+      <td><code>data-rpa-field</code></td>
+      <td>入力フィールドの意味を明示</td>
+      <td><code>customer-name</code>, <code>order-id</code></td>
+    </tr>
+    <tr>
+      <td><code>data-status</code></td>
+      <td>処理状態の機械可読表現</td>
+      <td><code>ready</code>, <code>processing</code>, <code>success</code>, <code>error</code></td>
+    </tr>
+  </table>
+
+  <h3>処理状態（data-status）の値</h3>
+  <table>
+    <tr>
+      <th>値</th>
+      <th>意味</th>
+      <th>RPAでの使用例</th>
+    </tr>
+    <tr>
+      <td><code>ready</code></td>
+      <td>入力待ち・準備完了</td>
+      <td>フォーム入力開始の判定</td>
+    </tr>
+    <tr>
+      <td><code>processing</code></td>
+      <td>処理中</td>
+      <td>待機（次の操作を待つ）</td>
+    </tr>
+    <tr>
+      <td><code>success</code></td>
+      <td>処理成功</td>
+      <td>次のレコード処理へ進む</td>
+    </tr>
+    <tr>
+      <td><code>error</code></td>
+      <td>エラー発生</td>
+      <td>エラーハンドリング実行</td>
+    </tr>
+  </table>
+
+  <h3>主要なボタンID一覧</h3>
+  <table>
+    <tr>
+      <th>画面</th>
+      <th>ボタン</th>
+      <th>ID</th>
+    </tr>
+    <tr>
+      <td rowspan="3">モックECサイト共通</td>
+      <td>CSVダウンロード</td>
+      <td><code>#btn-download-csv</code></td>
+    </tr>
+    <tr>
+      <td>プレビュー更新</td>
+      <td><code>#btn-refresh-preview</code></td>
+    </tr>
+    <tr>
+      <td>クリップボードコピー</td>
+      <td><code>#btn-copy-clipboard</code></td>
+    </tr>
+    <tr>
+      <td rowspan="4">販売管理システム</td>
+      <td>新規注文入力</td>
+      <td><code>#btn-new-order</code></td>
+    </tr>
+    <tr>
+      <td>検索</td>
+      <td><code>#btn-search</code></td>
+    </tr>
+    <tr>
+      <td>保存</td>
+      <td><code>#btn-save</code></td>
+    </tr>
+    <tr>
+      <td>インポート実行</td>
+      <td><code>#btn-import</code></td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2>8. サンプルデータ一覧</h2>
+
+  <h3>サンプルCSVファイル</h3>
+  <table>
+    <tr>
+      <th>ファイルパス</th>
+      <th>形式</th>
+      <th>説明</th>
+    </tr>
+    <tr>
+      <td><code>sample-data/rakuten/rakuten_sample.csv</code></td>
+      <td>楽天RMS形式</td>
+      <td>約40カラム、5件のサンプル注文</td>
+    </tr>
+    <tr>
+      <td><code>sample-data/amazon/amazon_sample.csv</code></td>
+      <td>Amazon形式</td>
+      <td>約30カラム、5件のサンプル注文</td>
+    </tr>
+    <tr>
+      <td><code>sample-data/yahoo/yahoo_orders_sample.csv</code></td>
+      <td>Yahoo注文形式</td>
+      <td>注文ヘッダー情報、5件</td>
+    </tr>
+    <tr>
+      <td><code>sample-data/yahoo/yahoo_items_sample.csv</code></td>
+      <td>Yahoo商品明細形式</td>
+      <td>注文に紐づく商品明細、6件</td>
+    </tr>
+    <tr>
+      <td><code>sample-data/generic_sample.csv</code></td>
+      <td>汎用形式</td>
+      <td>簡易版フォーマット、5件</td>
+    </tr>
+  </table>
+
+  <h3>ダミーデータ生成機能</h3>
+  <p>モックECサイトのCSVダウンロード画面では、毎回異なるダミーデータが自動生成されます。生成されるデータには以下が含まれます：</p>
+  <ul>
+    <li>ランダムな日本人名（姓名30種類以上）</li>
+    <li>全国47都道府県の住所</li>
+    <li>5カテゴリ25種類の商品（食品、家電、衣類、日用品、美容）</li>
+    <li>8種類の決済方法</li>
+    <li>6種類の配送方法</li>
+  </ul>
+
+  <div class="info-box">
+    <strong>ヒント:</strong> モック画面の「サンプルデータ生成」ボタンを押すと、表示データを更新できます。これにより、異なるパターンのデータでRPA処理をテストできます。
+  </div>
+
+  <div class="footer">
+    <p>RPA練習用 ECサイトモック＆販売管理システム 演習マニュアル</p>
+    <p>本ドキュメントは練習・教育目的で作成されています</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RMS - 店舗運営Navi</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/rakuten.css">
+</head>
+<body>
+  <header class="rms-header">
+    <div class="rms-header-top">
+      <div class="rms-logo">
+        <div class="rms-logo-icon">R</div>
+        <div>
+          <div class="rms-logo-text">RMS</div>
+          <div class="rms-logo-sub">店舗運営Navi（モック）</div>
+        </div>
+      </div>
+      <div class="rms-user-info">
+        <span>店舗名: テストショップ</span>
+        <span>担当者: 管理者</span>
+        <a href="../index.html" id="link-logout">ログアウト</a>
+      </div>
+    </div>
+    <nav class="rms-nav">
+      <ul>
+        <li><a href="index.html" class="active" id="nav-home">ホーム</a></li>
+        <li><a href="orders.html" id="nav-orders">受注管理</a></li>
+        <li><a href="#" id="nav-products">商品管理</a></li>
+        <li><a href="#" id="nav-inventory">在庫管理</a></li>
+        <li><a href="download.html" id="nav-download">データ分析</a></li>
+        <li><a href="#" id="nav-settings">店舗設定</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="rms-main" data-status="ready">
+    <aside class="rms-sidebar">
+      <div class="rms-sidebar-title">クイックアクセス</div>
+      <ul class="rms-sidebar-menu">
+        <li><a href="orders.html" id="sidebar-new-orders">新規受注確認</a></li>
+        <li><a href="download.html" id="sidebar-csv-download">CSVダウンロード</a></li>
+        <li><a href="#" id="sidebar-shipping">発送処理</a></li>
+        <li><a href="#" id="sidebar-inquiry">お問い合わせ</a></li>
+      </ul>
+      <div class="rms-sidebar-title" style="margin-top: 20px;">お知らせ</div>
+      <ul class="rms-sidebar-menu">
+        <li><a href="#">システムメンテナンス予定</a></li>
+        <li><a href="#">機能アップデート情報</a></li>
+      </ul>
+    </aside>
+
+    <div class="rms-content">
+      <h1 class="rms-page-title">ホーム</h1>
+
+      <div class="rms-alert rms-alert-info">
+        これはRPA練習用のモック画面です。実際の楽天RMSとは異なります。
+      </div>
+
+      <div class="grid grid-3">
+        <div class="rms-panel">
+          <div class="rms-panel-header">本日の受注</div>
+          <div class="rms-panel-body" style="text-align: center; padding: 30px;">
+            <div style="font-size: 48px; font-weight: bold; color: #BF0000;" id="stat-today-orders">12</div>
+            <div style="color: #666;">件</div>
+          </div>
+        </div>
+
+        <div class="rms-panel">
+          <div class="rms-panel-header">未処理受注</div>
+          <div class="rms-panel-body" style="text-align: center; padding: 30px;">
+            <div style="font-size: 48px; font-weight: bold; color: #ff6600;" id="stat-pending-orders">5</div>
+            <div style="color: #666;">件</div>
+          </div>
+        </div>
+
+        <div class="rms-panel">
+          <div class="rms-panel-header">今月の売上</div>
+          <div class="rms-panel-body" style="text-align: center; padding: 30px;">
+            <div style="font-size: 36px; font-weight: bold; color: #333;" id="stat-monthly-sales">¥1,234,567</div>
+            <div style="color: #666;">（税込）</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rms-panel">
+        <div class="rms-panel-header">最近の受注</div>
+        <div class="rms-panel-body">
+          <table class="rms-table" id="table-recent-orders">
+            <thead>
+              <tr>
+                <th>受注番号</th>
+                <th>注文日時</th>
+                <th>注文者</th>
+                <th>商品名</th>
+                <th>金額</th>
+                <th>ステータス</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-recent-orders">
+              <!-- JSで動的に生成 -->
+            </tbody>
+          </table>
+          <div style="text-align: right; margin-top: 15px;">
+            <a href="orders.html" class="rms-btn rms-btn-outline" id="btn-view-all-orders">すべての受注を見る</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="rms-panel">
+        <div class="rms-panel-header">よく使う機能</div>
+        <div class="rms-panel-body">
+          <div class="flex gap-20">
+            <a href="download.html" class="rms-btn rms-btn-primary" id="btn-csv-download">
+              CSVダウンロード
+            </a>
+            <a href="orders.html" class="rms-btn rms-btn-secondary" id="btn-order-management">
+              受注管理
+            </a>
+            <button class="rms-btn rms-btn-outline" id="btn-generate-data" onclick="generateSampleData()">
+              サンプルデータ生成
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="rms-footer">
+    <p>RPA Practice - Mock RMS System | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script>
+    // 初期データ生成
+    function generateSampleData() {
+      const orders = [];
+      for (let i = 0; i < 5; i++) {
+        orders.push(DataGenerator.generateRakutenOrder());
+      }
+
+      const tbody = document.getElementById('tbody-recent-orders');
+      tbody.innerHTML = '';
+
+      orders.forEach(order => {
+        const statusClass = {
+          '新規受付': 'rms-status-new',
+          '処理中': 'rms-status-processing',
+          '発送準備中': 'rms-status-processing',
+          '発送済み': 'rms-status-shipped',
+          '完了': 'rms-status-complete'
+        }[order.status] || 'rms-status-new';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.rakutenOrderId}</td>
+          <td>${order.orderDate.dateTimeStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>${order.items[0].name}${order.items.length > 1 ? ` 他${order.items.length - 1}点` : ''}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td><span class="rms-status ${statusClass}">${order.status}</span></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // 統計更新
+      document.getElementById('stat-today-orders').textContent = DataGenerator.randomInt(8, 20);
+      document.getElementById('stat-pending-orders').textContent = DataGenerator.randomInt(2, 8);
+    }
+
+    // ページ読み込み時にサンプルデータ生成
+    document.addEventListener('DOMContentLoaded', generateSampleData);
+  </script>
+</body>
+</html>

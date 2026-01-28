@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon セラーセントラル（モック）</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/amazon.css">
+</head>
+<body>
+  <header class="sc-header">
+    <div class="sc-header-top">
+      <div class="sc-logo">
+        <div class="sc-logo-text">amazon <span>seller central</span></div>
+        <div class="sc-logo-sub">（モック環境）</div>
+      </div>
+      <div class="sc-user-info">
+        <span>テストストア</span>
+        <a href="#" id="link-settings">設定</a>
+        <a href="../index.html" id="link-logout">サインアウト</a>
+      </div>
+    </div>
+    <nav class="sc-nav">
+      <ul>
+        <li><a href="index.html" class="active" id="nav-home">ホーム</a></li>
+        <li><a href="#" id="nav-catalog">カタログ</a></li>
+        <li><a href="#" id="nav-inventory">在庫</a></li>
+        <li><a href="#" id="nav-pricing">価格</a></li>
+        <li><a href="reports.html" id="nav-orders">注文</a></li>
+        <li><a href="reports.html" id="nav-reports">レポート</a></li>
+        <li><a href="#" id="nav-advertising">広告</a></li>
+        <li><a href="#" id="nav-performance">パフォーマンス</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="sc-main" data-status="ready">
+    <aside class="sc-sidebar">
+      <div class="sc-sidebar-title">クイックリンク</div>
+      <ul class="sc-sidebar-menu">
+        <li><a href="reports.html" id="sidebar-manage-orders">注文管理</a></li>
+        <li><a href="reports.html" id="sidebar-order-reports">注文レポート</a></li>
+        <li><a href="#" id="sidebar-inventory">在庫管理</a></li>
+        <li><a href="#" id="sidebar-payments">ペイメント</a></li>
+        <li><a href="#" id="sidebar-feedback">フィードバック</a></li>
+      </ul>
+    </aside>
+
+    <div class="sc-content">
+      <h1 class="sc-page-title">セラーセントラル ホーム</h1>
+
+      <div class="sc-alert sc-alert-info">
+        これはRPA練習用のモック画面です。実際のAmazonセラーセントラルとは異なります。
+      </div>
+
+      <!-- 統計カード -->
+      <div class="grid grid-4 mb-20">
+        <div class="sc-stat-card">
+          <div class="sc-stat-value" id="stat-today-orders">8</div>
+          <div class="sc-stat-label">本日の注文</div>
+        </div>
+        <div class="sc-stat-card">
+          <div class="sc-stat-value" id="stat-pending-orders">3</div>
+          <div class="sc-stat-label">未出荷</div>
+        </div>
+        <div class="sc-stat-card">
+          <div class="sc-stat-value" id="stat-monthly-sales">¥856,234</div>
+          <div class="sc-stat-label">今月の売上</div>
+        </div>
+        <div class="sc-stat-card">
+          <div class="sc-stat-value" id="stat-feedback-score">4.8</div>
+          <div class="sc-stat-label">フィードバック評価</div>
+        </div>
+      </div>
+
+      <!-- 注文概要 -->
+      <div class="sc-card">
+        <div class="sc-card-header">最近の注文</div>
+        <div class="sc-card-body">
+          <table class="sc-table" id="table-recent-orders">
+            <thead>
+              <tr>
+                <th>注文ID</th>
+                <th>注文日</th>
+                <th>購入者</th>
+                <th>商品</th>
+                <th>価格</th>
+                <th>ステータス</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-recent-orders">
+              <!-- JSで動的に生成 -->
+            </tbody>
+          </table>
+          <div style="margin-top: 15px; text-align: right;">
+            <a href="reports.html" class="sc-btn sc-btn-secondary" id="btn-view-all-orders">すべての注文を表示</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- アクション -->
+      <div class="sc-card">
+        <div class="sc-card-header">よく使うアクション</div>
+        <div class="sc-card-body">
+          <div class="flex gap-20">
+            <a href="reports.html" class="sc-btn sc-btn-primary sc-btn-large" id="btn-order-reports">
+              注文レポート
+            </a>
+            <a href="reports.html" class="sc-btn sc-btn-secondary sc-btn-large" id="btn-manage-orders">
+              注文管理
+            </a>
+            <button class="sc-btn sc-btn-secondary sc-btn-large" id="btn-generate-data" onclick="generateSampleData()">
+              サンプルデータ更新
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- お知らせ -->
+      <div class="sc-card">
+        <div class="sc-card-header">お知らせ</div>
+        <div class="sc-card-body">
+          <ul style="list-style: none; padding: 0;">
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+              <strong>システムメンテナンス予定</strong>
+              <p style="color: #666; font-size: 13px; margin-top: 5px;">これはモック環境のテストメッセージです。</p>
+            </li>
+            <li style="padding: 10px 0;">
+              <strong>新機能リリース</strong>
+              <p style="color: #666; font-size: 13px; margin-top: 5px;">RPA練習用の各種機能が利用可能です。</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="sc-footer">
+    <p>RPA Practice - Mock Amazon Seller Central | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script>
+    function generateSampleData() {
+      const orders = [];
+      for (let i = 0; i < 5; i++) {
+        orders.push(DataGenerator.generateAmazonOrder());
+      }
+
+      const tbody = document.getElementById('tbody-recent-orders');
+      tbody.innerHTML = '';
+
+      orders.forEach(order => {
+        const statusClass = order.status === '完了' || order.status === '発送済み'
+          ? 'sc-status-shipped'
+          : 'sc-status-pending';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.amazonOrderId}</td>
+          <td>${order.orderDate.dateStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>${order.items[0].name}${order.items.length > 1 ? ` +${order.items.length - 1}` : ''}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td><span class="sc-status ${statusClass}">${order.status}</span></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // 統計更新
+      document.getElementById('stat-today-orders').textContent = DataGenerator.randomInt(5, 15);
+      document.getElementById('stat-pending-orders').textContent = DataGenerator.randomInt(1, 5);
+      document.getElementById('stat-monthly-sales').textContent = '¥' + DataGenerator.randomInt(500000, 1500000).toLocaleString();
+    }
+
+    document.addEventListener('DOMContentLoaded', generateSampleData);
+  </script>
+</body>
+</html>

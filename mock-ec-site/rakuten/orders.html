@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>受注管理 - RMS</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/rakuten.css">
+</head>
+<body>
+  <header class="rms-header">
+    <div class="rms-header-top">
+      <div class="rms-logo">
+        <div class="rms-logo-icon">R</div>
+        <div>
+          <div class="rms-logo-text">RMS</div>
+          <div class="rms-logo-sub">店舗運営Navi（モック）</div>
+        </div>
+      </div>
+      <div class="rms-user-info">
+        <span>店舗名: テストショップ</span>
+        <span>担当者: 管理者</span>
+        <a href="../index.html" id="link-logout">ログアウト</a>
+      </div>
+    </div>
+    <nav class="rms-nav">
+      <ul>
+        <li><a href="index.html" id="nav-home">ホーム</a></li>
+        <li><a href="orders.html" class="active" id="nav-orders">受注管理</a></li>
+        <li><a href="#" id="nav-products">商品管理</a></li>
+        <li><a href="#" id="nav-inventory">在庫管理</a></li>
+        <li><a href="download.html" id="nav-download">データ分析</a></li>
+        <li><a href="#" id="nav-settings">店舗設定</a></li>
+      </ul>
+    </nav>
+    <nav class="rms-subnav">
+      <ul>
+        <li><a href="#" class="active" id="subnav-order-list">受注一覧</a></li>
+        <li><a href="#" id="subnav-shipping">発送処理</a></li>
+        <li><a href="#" id="subnav-cancel">キャンセル処理</a></li>
+        <li><a href="download.html" id="subnav-csv">CSV出力</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="rms-main" data-status="ready">
+    <aside class="rms-sidebar">
+      <div class="rms-sidebar-title">受注ステータス</div>
+      <ul class="rms-sidebar-menu">
+        <li><a href="#" class="active" id="filter-all" data-filter="all">すべて</a></li>
+        <li><a href="#" id="filter-new" data-filter="新規受付">新規受付</a></li>
+        <li><a href="#" id="filter-processing" data-filter="処理中">処理中</a></li>
+        <li><a href="#" id="filter-shipping" data-filter="発送準備中">発送準備中</a></li>
+        <li><a href="#" id="filter-shipped" data-filter="発送済み">発送済み</a></li>
+        <li><a href="#" id="filter-complete" data-filter="完了">完了</a></li>
+      </ul>
+    </aside>
+
+    <div class="rms-content">
+      <h1 class="rms-page-title">受注管理</h1>
+
+      <!-- 検索ボックス -->
+      <div class="rms-search-box" id="search-box">
+        <h3>受注検索</h3>
+        <div class="rms-form-row">
+          <div>
+            <label for="input-search-order-id">受注番号</label>
+            <input type="text" id="input-search-order-id" data-rpa-field="search-order-id" placeholder="例: 123456789-12345678-12345678">
+          </div>
+          <div>
+            <label for="input-search-customer">注文者名</label>
+            <input type="text" id="input-search-customer" data-rpa-field="search-customer" placeholder="例: 山田太郎">
+          </div>
+          <div>
+            <label for="input-search-date-from">注文日（開始）</label>
+            <input type="date" id="input-search-date-from" data-rpa-field="search-date-from">
+          </div>
+          <div>
+            <label for="input-search-date-to">注文日（終了）</label>
+            <input type="date" id="input-search-date-to" data-rpa-field="search-date-to">
+          </div>
+        </div>
+        <div class="flex gap-10">
+          <button class="rms-btn rms-btn-primary" id="btn-search" data-rpa-field="search-button" onclick="searchOrders()">検索</button>
+          <button class="rms-btn rms-btn-outline" id="btn-clear" onclick="clearSearch()">クリア</button>
+        </div>
+      </div>
+
+      <!-- 件数表示 -->
+      <div class="rms-count">
+        検索結果: <strong id="result-count">0</strong> 件
+      </div>
+
+      <!-- 一括操作 -->
+      <div class="flex flex-between mb-20">
+        <div class="flex gap-10">
+          <label class="rms-checkbox">
+            <input type="checkbox" id="check-all" onchange="toggleAllChecks()">
+            <span>すべて選択</span>
+          </label>
+        </div>
+        <div class="flex gap-10">
+          <button class="rms-btn rms-btn-secondary" id="btn-bulk-shipping" disabled>一括発送処理</button>
+          <a href="download.html" class="rms-btn rms-btn-outline" id="btn-csv-export">CSV出力</a>
+        </div>
+      </div>
+
+      <!-- 受注一覧テーブル -->
+      <div class="table-wrapper">
+        <table class="rms-table" id="table-orders">
+          <thead>
+            <tr>
+              <th style="width: 40px;"></th>
+              <th>楽天注文番号</th>
+              <th>受注番号</th>
+              <th>注文日時</th>
+              <th>注文者</th>
+              <th>商品</th>
+              <th>金額</th>
+              <th>決済方法</th>
+              <th>ステータス</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-orders">
+            <!-- JSで動的に生成 -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ページネーション -->
+      <div class="pagination" id="pagination">
+        <button id="btn-prev-page" disabled>&lt; 前へ</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button id="btn-next-page">次へ &gt;</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="rms-footer">
+    <p>RPA Practice - Mock RMS System | For Training Purposes Only</p>
+  </footer>
+
+  <!-- 注文詳細モーダル -->
+  <div class="modal-overlay" id="modal-order-detail">
+    <div class="modal" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>受注詳細</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body-order-detail">
+        <!-- 動的に生成 -->
+      </div>
+      <div class="modal-footer">
+        <button class="rms-btn rms-btn-outline" onclick="closeModal()">閉じる</button>
+        <button class="rms-btn rms-btn-primary" id="btn-modal-process">処理を進める</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data-generator.js"></script>
+  <script>
+    let orders = [];
+    let filteredOrders = [];
+
+    // 初期データ生成
+    function initializeOrders() {
+      orders = [];
+      for (let i = 0; i < 25; i++) {
+        orders.push(DataGenerator.generateRakutenOrder());
+      }
+      filteredOrders = [...orders];
+      renderOrders();
+    }
+
+    // 受注一覧を描画
+    function renderOrders() {
+      const tbody = document.getElementById('tbody-orders');
+      tbody.innerHTML = '';
+
+      filteredOrders.forEach((order, index) => {
+        const statusClass = {
+          '新規受付': 'rms-status-new',
+          '処理中': 'rms-status-processing',
+          '発送準備中': 'rms-status-processing',
+          '発送済み': 'rms-status-shipped',
+          '完了': 'rms-status-complete'
+        }[order.status] || 'rms-status-new';
+
+        const row = document.createElement('tr');
+        row.setAttribute('data-order-id', order.rakutenOrderId);
+        row.innerHTML = `
+          <td><input type="checkbox" class="order-check" data-index="${index}"></td>
+          <td class="order-id">${order.rakutenOrderId}</td>
+          <td>${order.orderId}</td>
+          <td>${order.orderDate.dateTimeStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>${order.items[0].name}${order.items.length > 1 ? ` 他${order.items.length - 1}点` : ''}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td>${order.payment.method}</td>
+          <td><span class="rms-status ${statusClass}">${order.status}</span></td>
+          <td>
+            <button class="rms-btn rms-btn-outline" style="padding: 5px 10px; font-size: 12px; min-width: auto;"
+                    onclick="showOrderDetail(${index})" data-rpa-field="view-detail-${index}">
+              詳細
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('result-count').textContent = filteredOrders.length;
+    }
+
+    // 検索
+    function searchOrders() {
+      const orderId = document.getElementById('input-search-order-id').value.toLowerCase();
+      const customer = document.getElementById('input-search-customer').value.toLowerCase();
+      const dateFrom = document.getElementById('input-search-date-from').value;
+      const dateTo = document.getElementById('input-search-date-to').value;
+
+      filteredOrders = orders.filter(order => {
+        if (orderId && !order.rakutenOrderId.toLowerCase().includes(orderId)) return false;
+        if (customer && !order.customer.fullName.toLowerCase().includes(customer)) return false;
+        if (dateFrom && order.orderDate.dateStr < dateFrom) return false;
+        if (dateTo && order.orderDate.dateStr > dateTo) return false;
+        return true;
+      });
+
+      renderOrders();
+    }
+
+    // 検索クリア
+    function clearSearch() {
+      document.getElementById('input-search-order-id').value = '';
+      document.getElementById('input-search-customer').value = '';
+      document.getElementById('input-search-date-from').value = '';
+      document.getElementById('input-search-date-to').value = '';
+      filteredOrders = [...orders];
+      renderOrders();
+    }
+
+    // ステータスフィルター
+    document.querySelectorAll('[data-filter]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('[data-filter]').forEach(l => l.classList.remove('active'));
+        e.target.classList.add('active');
+
+        const filter = e.target.dataset.filter;
+        if (filter === 'all') {
+          filteredOrders = [...orders];
+        } else {
+          filteredOrders = orders.filter(o => o.status === filter);
+        }
+        renderOrders();
+      });
+    });
+
+    // 全選択トグル
+    function toggleAllChecks() {
+      const checked = document.getElementById('check-all').checked;
+      document.querySelectorAll('.order-check').forEach(cb => cb.checked = checked);
+      document.getElementById('btn-bulk-shipping').disabled = !checked;
+    }
+
+    // 注文詳細表示
+    function showOrderDetail(index) {
+      const order = filteredOrders[index];
+      const modal = document.getElementById('modal-order-detail');
+      const body = document.getElementById('modal-body-order-detail');
+
+      body.innerHTML = `
+        <div class="rms-panel">
+          <div class="rms-panel-header">基本情報</div>
+          <div class="rms-panel-body">
+            <div class="rms-form-row">
+              <div><strong>楽天注文番号:</strong> ${order.rakutenOrderId}</div>
+              <div><strong>受注番号:</strong> ${order.orderId}</div>
+            </div>
+            <div class="rms-form-row">
+              <div><strong>注文日時:</strong> ${order.orderDate.dateTimeStr}</div>
+              <div><strong>ステータス:</strong> ${order.status}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rms-panel">
+          <div class="rms-panel-header">注文者情報</div>
+          <div class="rms-panel-body">
+            <div class="rms-form-row">
+              <div><strong>氏名:</strong> ${order.customer.fullName}</div>
+              <div><strong>電話番号:</strong> ${order.customer.phone}</div>
+            </div>
+            <div><strong>住所:</strong> 〒${order.customer.postalCode} ${order.customer.fullAddress}</div>
+            <div><strong>メール:</strong> ${order.customer.email}</div>
+          </div>
+        </div>
+
+        <div class="rms-panel">
+          <div class="rms-panel-header">商品情報</div>
+          <div class="rms-panel-body">
+            <table class="rms-table">
+              <thead>
+                <tr>
+                  <th>商品コード</th>
+                  <th>商品名</th>
+                  <th>単価</th>
+                  <th>数量</th>
+                  <th>小計</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${order.items.map(item => `
+                  <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>¥${item.price.toLocaleString()}</td>
+                    <td>${item.quantity}</td>
+                    <td>¥${item.subtotal.toLocaleString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rms-panel">
+          <div class="rms-panel-header">金額情報</div>
+          <div class="rms-panel-body">
+            <div class="rms-form-row">
+              <div><strong>商品合計:</strong> ¥${order.amounts.subtotal.toLocaleString()}</div>
+              <div><strong>送料:</strong> ¥${order.shipping.price.toLocaleString()}</div>
+            </div>
+            <div class="rms-form-row">
+              <div><strong>ポイント利用:</strong> -¥${(order.pointUsed || 0).toLocaleString()}</div>
+              <div><strong>クーポン:</strong> -¥${(order.couponDiscount || 0).toLocaleString()}</div>
+            </div>
+            <div class="rms-form-row">
+              <div><strong>消費税:</strong> ¥${order.amounts.tax.toLocaleString()}</div>
+              <div style="font-size: 18px;"><strong>合計:</strong> ¥${order.amounts.total.toLocaleString()}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      modal.classList.add('active');
+    }
+
+    // モーダルを閉じる
+    function closeModal() {
+      document.getElementById('modal-order-detail').classList.remove('active');
+    }
+
+    // モーダル外クリックで閉じる
+    document.getElementById('modal-order-detail').addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeModal();
+      }
+    });
+
+    // 初期化
+    document.addEventListener('DOMContentLoaded', initializeOrders);
+  </script>
+</body>
+</html>

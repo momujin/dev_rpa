@@ -1,0 +1,24 @@
+{
+  "name": "rpa-practice-environment",
+  "version": "1.0.0",
+  "description": "RPA練習用ECサイトモック＆販売管理システム",
+  "scripts": {
+    "install:all": "npm install && cd sales-management && npm install",
+    "start:web": "http-server mock-ec-site -p 8080 -c-1",
+    "start:app": "cd sales-management && npm start",
+    "dev": "concurrently \"npm run start:web\" \"npm run start:app\"",
+    "build:app": "cd sales-management && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "http-server": "^14.1.1"
+  },
+  "keywords": [
+    "rpa",
+    "practice",
+    "ec-site",
+    "sales-management"
+  ],
+  "author": "",
+  "license": "MIT"
+}

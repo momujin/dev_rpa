@@ -1,0 +1,30 @@
+{
+  "name": "sales-management",
+  "version": "1.0.0",
+  "description": "販売管理システム（Electronデスクトップアプリ）",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.rpa-practice.sales-management",
+    "productName": "販売管理システム",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

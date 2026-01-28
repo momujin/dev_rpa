@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPA練習用 ECサイトモック</title>
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-selector {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .site-selector h1 {
+      color: white;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .site-selector p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+    }
+
+    .site-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 900px;
+    }
+
+    @media (max-width: 768px) {
+      .site-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .site-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      text-decoration: none;
+      color: #333;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .site-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+    }
+
+    .site-card .logo {
+      width: 120px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    .site-card.rakuten .logo {
+      background: #BF0000;
+      color: white;
+    }
+
+    .site-card.amazon .logo {
+      background: #232F3E;
+      color: #FF9900;
+    }
+
+    .site-card.yahoo .logo {
+      background: #FF0033;
+      color: white;
+    }
+
+    .site-card h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .site-card p {
+      color: #666;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .site-card .badge {
+      margin-top: 15px;
+      background: #f0f0f0;
+      color: #666;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-selector" id="site-selector" data-status="ready">
+    <h1>RPA練習用 ECサイトモック</h1>
+    <p>練習したいECサイトの管理画面を選択してください</p>
+
+    <div class="site-cards">
+      <a href="rakuten/index.html" class="site-card rakuten" id="link-rakuten" data-rpa-field="rakuten-link">
+        <div class="logo">R</div>
+        <h2>楽天RMS</h2>
+        <p>楽天市場の店舗管理システム（RMS）風のインターフェース</p>
+        <span class="badge">約40カラムCSV</span>
+      </a>
+
+      <a href="amazon/index.html" class="site-card amazon" id="link-amazon" data-rpa-field="amazon-link">
+        <div class="logo">amazon</div>
+        <h2>Amazon セラーセントラル</h2>
+        <p>Amazonマーケットプレイスの販売者管理画面風インターフェース</p>
+        <span class="badge">約30カラムCSV</span>
+      </a>
+
+      <a href="yahoo/index.html" class="site-card yahoo" id="link-yahoo" data-rpa-field="yahoo-link">
+        <div class="logo">Y!</div>
+        <h2>Yahoo!ストアクリエイター</h2>
+        <p>Yahoo!ショッピングの店舗管理ツール風インターフェース</p>
+        <span class="badge">注文+商品2ファイル</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    RPA Practice Environment - For Training Purposes Only
+  </footer>
+</body>
+</html>

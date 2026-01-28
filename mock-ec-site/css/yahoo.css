@@ -1,0 +1,458 @@
+/**
+ * Yahoo!ストアクリエイター風スタイル
+ * メインカラー: #FF0033 (Yahoo!レッド)
+ */
+
+:root {
+  --yahoo-red: #FF0033;
+  --yahoo-dark-red: #CC0029;
+  --yahoo-light-red: #FFF0F3;
+  --yahoo-gray: #666666;
+  --yahoo-light-gray: #F5F5F5;
+  --yahoo-border: #E0E0E0;
+}
+
+/* ヘッダー */
+.ysc-header {
+  background: white;
+  border-bottom: 3px solid var(--yahoo-red);
+}
+
+.ysc-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.ysc-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ysc-logo-icon {
+  background: var(--yahoo-red);
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.ysc-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.ysc-logo-sub {
+  font-size: 11px;
+  color: #999;
+}
+
+.ysc-user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+  color: var(--yahoo-gray);
+}
+
+.ysc-user-info a {
+  color: var(--yahoo-red);
+  text-decoration: none;
+}
+
+.ysc-user-info a:hover {
+  text-decoration: underline;
+}
+
+/* メインナビゲーション */
+.ysc-nav {
+  background: var(--yahoo-light-gray);
+  border-bottom: 1px solid var(--yahoo-border);
+  padding: 0 20px;
+}
+
+.ysc-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ysc-nav li a {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: bold;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+
+.ysc-nav li a:hover {
+  color: var(--yahoo-red);
+}
+
+.ysc-nav li a.active {
+  color: var(--yahoo-red);
+  border-bottom-color: var(--yahoo-red);
+  background: white;
+}
+
+/* メインコンテンツ */
+.ysc-main {
+  display: flex;
+  min-height: calc(100vh - 120px);
+  background: #FAFAFA;
+}
+
+.ysc-sidebar {
+  width: 200px;
+  background: white;
+  border-right: 1px solid var(--yahoo-border);
+}
+
+.ysc-sidebar-title {
+  padding: 15px;
+  font-weight: bold;
+  font-size: 13px;
+  color: #333;
+  background: var(--yahoo-light-gray);
+  border-bottom: 1px solid var(--yahoo-border);
+}
+
+.ysc-sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ysc-sidebar-menu li a {
+  display: block;
+  padding: 12px 15px;
+  color: #333;
+  text-decoration: none;
+  font-size: 13px;
+  border-bottom: 1px solid var(--yahoo-border);
+}
+
+.ysc-sidebar-menu li a:hover {
+  background: var(--yahoo-light-red);
+  color: var(--yahoo-red);
+}
+
+.ysc-sidebar-menu li a.active {
+  background: var(--yahoo-light-red);
+  color: var(--yahoo-red);
+  font-weight: bold;
+  border-left: 3px solid var(--yahoo-red);
+}
+
+.ysc-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* ページタイトル */
+.ysc-page-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--yahoo-red);
+}
+
+/* カード */
+.ysc-card {
+  background: white;
+  border: 1px solid var(--yahoo-border);
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.ysc-card-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--yahoo-border);
+  font-weight: bold;
+  font-size: 15px;
+  color: #333;
+  background: var(--yahoo-light-gray);
+}
+
+.ysc-card-body {
+  padding: 20px;
+}
+
+/* ボタン */
+.ysc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 40px;
+}
+
+.ysc-btn-primary {
+  background: var(--yahoo-red);
+  color: white;
+}
+
+.ysc-btn-primary:hover {
+  background: var(--yahoo-dark-red);
+}
+
+.ysc-btn-secondary {
+  background: #666;
+  color: white;
+}
+
+.ysc-btn-secondary:hover {
+  background: #555;
+}
+
+.ysc-btn-outline {
+  background: white;
+  color: var(--yahoo-red);
+  border: 2px solid var(--yahoo-red);
+}
+
+.ysc-btn-outline:hover {
+  background: var(--yahoo-light-red);
+}
+
+.ysc-btn-large {
+  padding: 15px 30px;
+  font-size: 16px;
+  min-height: 50px;
+}
+
+/* テーブル */
+.ysc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ysc-table th {
+  background: var(--yahoo-light-gray);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid var(--yahoo-border);
+  color: #333;
+}
+
+.ysc-table td {
+  padding: 10px 12px;
+  border: 1px solid var(--yahoo-border);
+}
+
+.ysc-table tr:hover {
+  background: #FAFAFA;
+}
+
+.ysc-table .order-id {
+  color: var(--yahoo-red);
+  font-weight: bold;
+}
+
+/* フォーム */
+.ysc-form-group {
+  margin-bottom: 20px;
+}
+
+.ysc-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 13px;
+  color: #333;
+}
+
+.ysc-form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.ysc-form-row > div {
+  flex: 1;
+}
+
+.ysc-input,
+.ysc-select {
+  padding: 10px 12px;
+  font-size: 13px;
+  border: 1px solid var(--yahoo-border);
+  border-radius: 4px;
+  width: 100%;
+}
+
+.ysc-input:focus,
+.ysc-select:focus {
+  outline: none;
+  border-color: var(--yahoo-red);
+  box-shadow: 0 0 0 2px rgba(255, 0, 51, 0.1);
+}
+
+/* アラート */
+.ysc-alert {
+  padding: 15px 20px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.ysc-alert-info {
+  background: #E7F3FF;
+  border: 1px solid #B8DAFF;
+  color: #004085;
+}
+
+.ysc-alert-warning {
+  background: #FFF8E1;
+  border: 1px solid #FFE082;
+  color: #856404;
+}
+
+.ysc-alert-success {
+  background: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  color: #2E7D32;
+}
+
+/* ダウンロードセクション */
+.ysc-download-section {
+  background: var(--yahoo-light-red);
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px dashed var(--yahoo-red);
+  margin: 20px 0;
+}
+
+.ysc-download-section h3 {
+  color: var(--yahoo-red);
+  margin-bottom: 10px;
+}
+
+.ysc-download-section p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* ステータス */
+.ysc-status {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.ysc-status-new {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+
+.ysc-status-paid {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.ysc-status-unpaid {
+  background: #FFF8E1;
+  color: #F57F17;
+}
+
+.ysc-status-shipped {
+  background: #E0F7FA;
+  color: #00838F;
+}
+
+.ysc-status-complete {
+  background: #F5F5F5;
+  color: #616161;
+}
+
+/* 統計カード */
+.ysc-stat-card {
+  background: white;
+  border: 1px solid var(--yahoo-border);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.ysc-stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--yahoo-red);
+}
+
+.ysc-stat-label {
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* フッター */
+.ysc-footer {
+  background: #333;
+  color: #999;
+  padding: 15px 20px;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* カウント表示 */
+.ysc-count {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.ysc-count strong {
+  color: var(--yahoo-red);
+}
+
+/* タブ */
+.ysc-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--yahoo-border);
+  margin-bottom: 20px;
+}
+
+.ysc-tab {
+  padding: 12px 25px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  font-weight: bold;
+}
+
+.ysc-tab:hover {
+  color: var(--yahoo-red);
+}
+
+.ysc-tab.active {
+  color: var(--yahoo-red);
+  border-bottom-color: var(--yahoo-red);
+}

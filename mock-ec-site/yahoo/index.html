@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yahoo!ストアクリエイター Pro（モック）</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/yahoo.css">
+</head>
+<body>
+  <header class="ysc-header">
+    <div class="ysc-header-top">
+      <div class="ysc-logo">
+        <div class="ysc-logo-icon">Y!</div>
+        <div>
+          <div class="ysc-logo-text">ストアクリエイター Pro</div>
+          <div class="ysc-logo-sub">（モック環境）</div>
+        </div>
+      </div>
+      <div class="ysc-user-info">
+        <span>ストアID: teststore</span>
+        <span>テストショップ</span>
+        <a href="#" id="link-help">ヘルプ</a>
+        <a href="../index.html" id="link-logout">ログアウト</a>
+      </div>
+    </div>
+    <nav class="ysc-nav">
+      <ul>
+        <li><a href="index.html" class="active" id="nav-home">ホーム</a></li>
+        <li><a href="#" id="nav-store">ストア構築</a></li>
+        <li><a href="#" id="nav-products">商品管理</a></li>
+        <li><a href="download.html" id="nav-orders">注文管理</a></li>
+        <li><a href="download.html" id="nav-download">データ管理</a></li>
+        <li><a href="#" id="nav-promotion">販促</a></li>
+        <li><a href="#" id="nav-stats">統計</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="ysc-main" data-status="ready">
+    <aside class="ysc-sidebar">
+      <div class="ysc-sidebar-title">メニュー</div>
+      <ul class="ysc-sidebar-menu">
+        <li><a href="download.html" id="sidebar-orders">注文一覧</a></li>
+        <li><a href="download.html" id="sidebar-download">データダウンロード</a></li>
+        <li><a href="#" id="sidebar-shipping">出荷管理</a></li>
+        <li><a href="#" id="sidebar-inquiry">問い合わせ</a></li>
+        <li><a href="#" id="sidebar-review">レビュー管理</a></li>
+      </ul>
+    </aside>
+
+    <div class="ysc-content">
+      <h1 class="ysc-page-title">ストアクリエイター Pro ホーム</h1>
+
+      <div class="ysc-alert ysc-alert-info">
+        これはRPA練習用のモック画面です。実際のYahoo!ストアクリエイターとは異なります。
+      </div>
+
+      <!-- 統計カード -->
+      <div class="grid grid-4 mb-20">
+        <div class="ysc-stat-card">
+          <div class="ysc-stat-value" id="stat-today-orders">15</div>
+          <div class="ysc-stat-label">本日の注文</div>
+        </div>
+        <div class="ysc-stat-card">
+          <div class="ysc-stat-value" id="stat-unpaid">4</div>
+          <div class="ysc-stat-label">未入金</div>
+        </div>
+        <div class="ysc-stat-card">
+          <div class="ysc-stat-value" id="stat-unshipped">6</div>
+          <div class="ysc-stat-label">未出荷</div>
+        </div>
+        <div class="ysc-stat-card">
+          <div class="ysc-stat-value" id="stat-monthly-sales">¥723,456</div>
+          <div class="ysc-stat-label">今月の売上</div>
+        </div>
+      </div>
+
+      <!-- 最近の注文 -->
+      <div class="ysc-card">
+        <div class="ysc-card-header">最近の注文</div>
+        <div class="ysc-card-body">
+          <table class="ysc-table" id="table-recent-orders">
+            <thead>
+              <tr>
+                <th>注文ID</th>
+                <th>注文日時</th>
+                <th>注文者</th>
+                <th>金額</th>
+                <th>入金状況</th>
+                <th>出荷状況</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-recent-orders">
+              <!-- JSで動的に生成 -->
+            </tbody>
+          </table>
+          <div style="margin-top: 15px; text-align: right;">
+            <a href="download.html" class="ysc-btn ysc-btn-outline" id="btn-view-all-orders">すべての注文を見る</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- アクション -->
+      <div class="ysc-card">
+        <div class="ysc-card-header">よく使う機能</div>
+        <div class="ysc-card-body">
+          <div class="flex gap-20">
+            <a href="download.html" class="ysc-btn ysc-btn-primary ysc-btn-large" id="btn-data-download">
+              データダウンロード
+            </a>
+            <a href="download.html" class="ysc-btn ysc-btn-secondary ysc-btn-large" id="btn-order-management">
+              注文管理
+            </a>
+            <button class="ysc-btn ysc-btn-outline ysc-btn-large" id="btn-generate-data" onclick="generateSampleData()">
+              サンプルデータ更新
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- お知らせ -->
+      <div class="ysc-card">
+        <div class="ysc-card-header">お知らせ</div>
+        <div class="ysc-card-body">
+          <ul style="list-style: none; padding: 0;">
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <span style="color: var(--yahoo-red); font-weight: bold; margin-right: 10px;">重要</span>
+              システムメンテナンスのお知らせ（モック）
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+              <span style="color: #666; margin-right: 10px;">情報</span>
+              RPA練習環境のご利用方法について
+            </li>
+            <li style="padding: 12px 0;">
+              <span style="color: #666; margin-right: 10px;">情報</span>
+              CSVダウンロード機能について
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="ysc-footer">
+    <p>RPA Practice - Mock Yahoo! Store Creator | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script>
+    function generateSampleData() {
+      const orders = [];
+      for (let i = 0; i < 5; i++) {
+        orders.push(DataGenerator.generateYahooOrder());
+      }
+
+      const tbody = document.getElementById('tbody-recent-orders');
+      tbody.innerHTML = '';
+
+      orders.forEach(order => {
+        const paymentStatusClass = order.paymentStatus === '入金済み' ? 'ysc-status-paid' : 'ysc-status-unpaid';
+        const shippingStatus = order.status === '発送済み' || order.status === '完了' ? '出荷済み' : '未出荷';
+        const shippingStatusClass = shippingStatus === '出荷済み' ? 'ysc-status-shipped' : 'ysc-status-new';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.yahooOrderId}</td>
+          <td>${order.orderDate.dateTimeStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td><span class="ysc-status ${paymentStatusClass}">${order.paymentStatus}</span></td>
+          <td><span class="ysc-status ${shippingStatusClass}">${shippingStatus}</span></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // 統計更新
+      document.getElementById('stat-today-orders').textContent = DataGenerator.randomInt(10, 25);
+      document.getElementById('stat-unpaid').textContent = DataGenerator.randomInt(2, 8);
+      document.getElementById('stat-unshipped').textContent = DataGenerator.randomInt(3, 10);
+      document.getElementById('stat-monthly-sales').textContent = '¥' + DataGenerator.randomInt(400000, 1000000).toLocaleString();
+    }
+
+    document.addEventListener('DOMContentLoaded', generateSampleData);
+  </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注文レポート - Amazon セラーセントラル（モック）</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/amazon.css">
+</head>
+<body>
+  <header class="sc-header">
+    <div class="sc-header-top">
+      <div class="sc-logo">
+        <div class="sc-logo-text">amazon <span>seller central</span></div>
+        <div class="sc-logo-sub">（モック環境）</div>
+      </div>
+      <div class="sc-user-info">
+        <span>テストストア</span>
+        <a href="#" id="link-settings">設定</a>
+        <a href="../index.html" id="link-logout">サインアウト</a>
+      </div>
+    </div>
+    <nav class="sc-nav">
+      <ul>
+        <li><a href="index.html" id="nav-home">ホーム</a></li>
+        <li><a href="#" id="nav-catalog">カタログ</a></li>
+        <li><a href="#" id="nav-inventory">在庫</a></li>
+        <li><a href="#" id="nav-pricing">価格</a></li>
+        <li><a href="reports.html" id="nav-orders">注文</a></li>
+        <li><a href="reports.html" class="active" id="nav-reports">レポート</a></li>
+        <li><a href="#" id="nav-advertising">広告</a></li>
+        <li><a href="#" id="nav-performance">パフォーマンス</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="sc-main" id="main-content" data-status="ready">
+    <aside class="sc-sidebar">
+      <div class="sc-sidebar-title">レポート</div>
+      <ul class="sc-sidebar-menu">
+        <li><a href="#" class="active" id="sidebar-order-reports">注文レポート</a></li>
+        <li><a href="#" id="sidebar-return-reports">返品レポート</a></li>
+        <li><a href="#" id="sidebar-payment-reports">決済レポート</a></li>
+        <li><a href="#" id="sidebar-fulfillment-reports">FBAレポート</a></li>
+        <li><a href="#" id="sidebar-tax-reports">税務レポート</a></li>
+      </ul>
+      <div class="sc-sidebar-title" style="margin-top: 20px;">注文管理</div>
+      <ul class="sc-sidebar-menu">
+        <li><a href="#" id="sidebar-manage-all">すべての注文</a></li>
+        <li><a href="#" id="sidebar-pending">未出荷</a></li>
+        <li><a href="#" id="sidebar-shipped">出荷済み</a></li>
+      </ul>
+    </aside>
+
+    <div class="sc-content">
+      <h1 class="sc-page-title">注文レポート</h1>
+
+      <!-- タブ -->
+      <div class="sc-tabs">
+        <a href="#" class="sc-tab active" id="tab-generate">レポート生成</a>
+        <a href="#" class="sc-tab" id="tab-orders">注文一覧</a>
+        <a href="#" class="sc-tab" id="tab-download">ダウンロード履歴</a>
+      </div>
+
+      <!-- レポート条件設定 -->
+      <div class="sc-card" id="panel-generate">
+        <div class="sc-card-header">レポート条件を指定</div>
+        <div class="sc-card-body">
+          <div class="sc-form-row">
+            <div class="sc-form-group">
+              <label for="select-report-type">レポートタイプ</label>
+              <select id="select-report-type" class="sc-select" data-rpa-field="report-type">
+                <option value="all">すべての注文</option>
+                <option value="unshipped">未出荷注文</option>
+                <option value="shipped">出荷済み注文</option>
+                <option value="cancelled">キャンセル注文</option>
+              </select>
+            </div>
+            <div class="sc-form-group">
+              <label for="select-date-range">期間</label>
+              <select id="select-date-range" class="sc-select" data-rpa-field="date-range">
+                <option value="7">過去7日間</option>
+                <option value="14">過去14日間</option>
+                <option value="30" selected>過去30日間</option>
+                <option value="60">過去60日間</option>
+                <option value="custom">カスタム期間</option>
+              </select>
+            </div>
+            <div class="sc-form-group">
+              <label for="select-fulfillment">フルフィルメント</label>
+              <select id="select-fulfillment" class="sc-select" data-rpa-field="fulfillment">
+                <option value="all">すべて</option>
+                <option value="MFN">出品者出荷（MFN）</option>
+                <option value="AFN">FBA出荷（AFN）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sc-form-row">
+            <div class="sc-form-group">
+              <label for="input-date-from">開始日</label>
+              <input type="date" id="input-date-from" class="sc-input" data-rpa-field="date-from" disabled>
+            </div>
+            <div class="sc-form-group">
+              <label for="input-date-to">終了日</label>
+              <input type="date" id="input-date-to" class="sc-input" data-rpa-field="date-to" disabled>
+            </div>
+            <div class="sc-form-group">
+              <label for="input-order-count">出力件数</label>
+              <select id="input-order-count" class="sc-select" data-rpa-field="order-count">
+                <option value="10">10件</option>
+                <option value="25" selected>25件</option>
+                <option value="50">50件</option>
+                <option value="100">100件</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <button class="sc-btn sc-btn-primary" id="btn-generate-report" data-rpa-field="generate-report" onclick="generateReport()">
+              レポートを生成
+            </button>
+            <button class="sc-btn sc-btn-secondary" id="btn-reset" onclick="resetForm()">
+              リセット
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- プレビュー -->
+      <div class="sc-card" id="panel-preview" style="display: none;">
+        <div class="sc-card-header">
+          レポートプレビュー
+          <span class="sc-count" style="float: right;">
+            <strong id="preview-count">0</strong> 件のレコード
+          </span>
+        </div>
+        <div class="sc-card-body">
+          <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+            <table class="sc-table" id="table-preview">
+              <thead>
+                <tr>
+                  <th>注文ID</th>
+                  <th>注文日</th>
+                  <th>購入者</th>
+                  <th>商品</th>
+                  <th>SKU</th>
+                  <th>数量</th>
+                  <th>価格</th>
+                  <th>出荷</th>
+                  <th>ステータス</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-preview">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ダウンロードセクション -->
+      <div class="sc-download-section" id="download-section" data-status="ready" style="display: none;">
+        <h3>レポートをダウンロード</h3>
+        <p>生成されたレポートをCSV形式でダウンロードできます。</p>
+        <div class="flex flex-center gap-20">
+          <button class="sc-btn sc-btn-primary sc-btn-large" id="btn-download-csv"
+                  data-rpa-field="download-button" onclick="downloadCSV()">
+            CSVをダウンロード
+          </button>
+          <button class="sc-btn sc-btn-secondary sc-btn-large" id="btn-copy-clipboard"
+                  data-rpa-field="copy-button" onclick="copyToClipboard()">
+            クリップボードにコピー
+          </button>
+        </div>
+        <p id="download-status" style="margin-top: 15px; color: #666;" data-rpa-field="download-status"></p>
+      </div>
+
+      <!-- 注文一覧（タブ切り替え用） -->
+      <div class="sc-card" id="panel-orders" style="display: none;">
+        <div class="sc-card-header">注文一覧</div>
+        <div class="sc-card-body">
+          <div class="sc-search-box">
+            <div class="sc-form-row">
+              <div class="sc-form-group">
+                <label for="input-search-order-id">注文ID</label>
+                <input type="text" id="input-search-order-id" class="sc-input" data-rpa-field="search-order-id" placeholder="例: 123-1234567-1234567">
+              </div>
+              <div class="sc-form-group">
+                <label for="input-search-buyer">購入者名</label>
+                <input type="text" id="input-search-buyer" class="sc-input" data-rpa-field="search-buyer">
+              </div>
+              <div class="sc-form-group" style="align-self: flex-end;">
+                <button class="sc-btn sc-btn-primary" id="btn-search" onclick="searchOrders()">検索</button>
+              </div>
+            </div>
+          </div>
+
+          <table class="sc-table" id="table-orders">
+            <thead>
+              <tr>
+                <th>注文ID</th>
+                <th>注文日</th>
+                <th>購入者</th>
+                <th>合計</th>
+                <th>フルフィルメント</th>
+                <th>ステータス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-orders">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="sc-footer">
+    <p>RPA Practice - Mock Amazon Seller Central | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script src="../js/csv-exporter.js"></script>
+  <script>
+    let previewOrders = [];
+    let allOrders = [];
+
+    // 期間選択の変更
+    document.getElementById('select-date-range').addEventListener('change', function() {
+      const isCustom = this.value === 'custom';
+      document.getElementById('input-date-from').disabled = !isCustom;
+      document.getElementById('input-date-to').disabled = !isCustom;
+    });
+
+    // タブ切り替え
+    document.querySelectorAll('.sc-tab').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+
+        const tabId = this.id;
+        document.getElementById('panel-generate').style.display = tabId === 'tab-generate' ? 'block' : 'none';
+        document.getElementById('panel-preview').style.display = tabId === 'tab-generate' && previewOrders.length > 0 ? 'block' : 'none';
+        document.getElementById('download-section').style.display = tabId === 'tab-generate' && previewOrders.length > 0 ? 'block' : 'none';
+        document.getElementById('panel-orders').style.display = tabId === 'tab-orders' ? 'block' : 'none';
+
+        if (tabId === 'tab-orders' && allOrders.length === 0) {
+          loadAllOrders();
+        }
+      });
+    });
+
+    // レポート生成
+    function generateReport() {
+      const count = parseInt(document.getElementById('input-order-count').value);
+      const reportType = document.getElementById('select-report-type').value;
+      const fulfillment = document.getElementById('select-fulfillment').value;
+
+      previewOrders = [];
+      for (let i = 0; i < count; i++) {
+        const order = DataGenerator.generateAmazonOrder();
+
+        // フィルター適用
+        if (fulfillment !== 'all') {
+          order.fulfillmentChannel = fulfillment;
+        }
+
+        if (reportType === 'unshipped') {
+          order.status = '処理中';
+        } else if (reportType === 'shipped') {
+          order.status = '発送済み';
+        } else if (reportType === 'cancelled') {
+          order.status = 'キャンセル';
+        }
+
+        previewOrders.push(order);
+      }
+
+      renderPreview();
+      document.getElementById('panel-preview').style.display = 'block';
+      document.getElementById('download-section').style.display = 'block';
+    }
+
+    // プレビュー描画
+    function renderPreview() {
+      const tbody = document.getElementById('tbody-preview');
+      tbody.innerHTML = '';
+
+      previewOrders.forEach(order => {
+        order.items.forEach((item, idx) => {
+          const statusClass = order.status === '発送済み' || order.status === '完了'
+            ? 'sc-status-shipped'
+            : order.status === 'キャンセル'
+            ? 'sc-status-cancelled'
+            : 'sc-status-pending';
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="order-id">${idx === 0 ? order.amazonOrderId : ''}</td>
+            <td>${idx === 0 ? order.orderDate.dateStr : ''}</td>
+            <td>${idx === 0 ? order.customer.fullName : ''}</td>
+            <td>${item.name}</td>
+            <td>${item.code}</td>
+            <td>${item.quantity}</td>
+            <td>¥${item.price.toLocaleString()}</td>
+            <td>${idx === 0 ? (order.fulfillmentChannel || 'MFN') : ''}</td>
+            <td>${idx === 0 ? `<span class="sc-status ${statusClass}">${order.status}</span>` : ''}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      });
+
+      document.getElementById('preview-count').textContent = previewOrders.length;
+    }
+
+    // CSVダウンロード
+    function downloadCSV() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'ダウンロード準備中...';
+
+      setTimeout(() => {
+        const now = new Date();
+        const filename = `amazon_orders_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}.csv`;
+
+        CSVExporter.exportAmazonCSV(previewOrders, filename);
+
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = `${filename} をダウンロードしました`;
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+        }, 3000);
+      }, 500);
+    }
+
+    // クリップボードにコピー
+    function copyToClipboard() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'コピー中...';
+
+      const csv = CSVExporter.generateCSVString(previewOrders, 'amazon');
+
+      navigator.clipboard.writeText(csv).then(() => {
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = 'クリップボードにコピーしました';
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+          statusEl.textContent = '';
+        }, 3000);
+      }).catch(err => {
+        section.setAttribute('data-status', 'error');
+        statusEl.textContent = 'コピーに失敗しました';
+      });
+    }
+
+    // フォームリセット
+    function resetForm() {
+      document.getElementById('select-report-type').value = 'all';
+      document.getElementById('select-date-range').value = '30';
+      document.getElementById('select-fulfillment').value = 'all';
+      document.getElementById('input-order-count').value = '25';
+      document.getElementById('input-date-from').value = '';
+      document.getElementById('input-date-to').value = '';
+      document.getElementById('input-date-from').disabled = true;
+      document.getElementById('input-date-to').disabled = true;
+
+      previewOrders = [];
+      document.getElementById('panel-preview').style.display = 'none';
+      document.getElementById('download-section').style.display = 'none';
+    }
+
+    // 注文一覧読み込み
+    function loadAllOrders() {
+      allOrders = [];
+      for (let i = 0; i < 20; i++) {
+        allOrders.push(DataGenerator.generateAmazonOrder());
+      }
+      renderOrdersList();
+    }
+
+    // 注文一覧描画
+    function renderOrdersList() {
+      const tbody = document.getElementById('tbody-orders');
+      tbody.innerHTML = '';
+
+      allOrders.forEach((order, index) => {
+        const statusClass = order.status === '発送済み' || order.status === '完了'
+          ? 'sc-status-shipped'
+          : 'sc-status-pending';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.amazonOrderId}</td>
+          <td>${order.orderDate.dateStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td>${order.fulfillmentChannel || 'MFN'}</td>
+          <td><span class="sc-status ${statusClass}">${order.status}</span></td>
+          <td>
+            <button class="sc-btn sc-btn-link" onclick="viewOrderDetail(${index})">詳細</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // 検索
+    function searchOrders() {
+      const orderId = document.getElementById('input-search-order-id').value.toLowerCase();
+      const buyer = document.getElementById('input-search-buyer').value.toLowerCase();
+
+      const filtered = allOrders.filter(order => {
+        if (orderId && !order.amazonOrderId.toLowerCase().includes(orderId)) return false;
+        if (buyer && !order.customer.fullName.toLowerCase().includes(buyer)) return false;
+        return true;
+      });
+
+      const tbody = document.getElementById('tbody-orders');
+      tbody.innerHTML = '';
+
+      filtered.forEach((order, index) => {
+        const statusClass = order.status === '発送済み' || order.status === '完了'
+          ? 'sc-status-shipped'
+          : 'sc-status-pending';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.amazonOrderId}</td>
+          <td>${order.orderDate.dateStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+          <td>${order.fulfillmentChannel || 'MFN'}</td>
+          <td><span class="sc-status ${statusClass}">${order.status}</span></td>
+          <td>
+            <button class="sc-btn sc-btn-link" onclick="viewOrderDetail(${index})">詳細</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function viewOrderDetail(index) {
+      alert('注文詳細機能はモックです。\n注文ID: ' + allOrders[index].amazonOrderId);
+    }
+  </script>
+</body>
+</html>

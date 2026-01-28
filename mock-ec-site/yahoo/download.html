@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>データダウンロード - Yahoo!ストアクリエイター Pro（モック）</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/yahoo.css">
+</head>
+<body>
+  <header class="ysc-header">
+    <div class="ysc-header-top">
+      <div class="ysc-logo">
+        <div class="ysc-logo-icon">Y!</div>
+        <div>
+          <div class="ysc-logo-text">ストアクリエイター Pro</div>
+          <div class="ysc-logo-sub">（モック環境）</div>
+        </div>
+      </div>
+      <div class="ysc-user-info">
+        <span>ストアID: teststore</span>
+        <span>テストショップ</span>
+        <a href="#" id="link-help">ヘルプ</a>
+        <a href="../index.html" id="link-logout">ログアウト</a>
+      </div>
+    </div>
+    <nav class="ysc-nav">
+      <ul>
+        <li><a href="index.html" id="nav-home">ホーム</a></li>
+        <li><a href="#" id="nav-store">ストア構築</a></li>
+        <li><a href="#" id="nav-products">商品管理</a></li>
+        <li><a href="download.html" id="nav-orders">注文管理</a></li>
+        <li><a href="download.html" class="active" id="nav-download">データ管理</a></li>
+        <li><a href="#" id="nav-promotion">販促</a></li>
+        <li><a href="#" id="nav-stats">統計</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="ysc-main" id="main-content" data-status="ready">
+    <aside class="ysc-sidebar">
+      <div class="ysc-sidebar-title">データ管理</div>
+      <ul class="ysc-sidebar-menu">
+        <li><a href="#" class="active" id="sidebar-order-download">注文データ</a></li>
+        <li><a href="#" id="sidebar-product-download">商品データ</a></li>
+        <li><a href="#" id="sidebar-customer-download">顧客データ</a></li>
+        <li><a href="#" id="sidebar-stock-download">在庫データ</a></li>
+      </ul>
+      <div class="ysc-sidebar-title" style="margin-top: 20px;">注文管理</div>
+      <ul class="ysc-sidebar-menu">
+        <li><a href="#" id="sidebar-order-list">注文一覧</a></li>
+        <li><a href="#" id="sidebar-shipping">出荷処理</a></li>
+        <li><a href="#" id="sidebar-cancel">キャンセル処理</a></li>
+      </ul>
+    </aside>
+
+    <div class="ysc-content">
+      <h1 class="ysc-page-title">データダウンロード</h1>
+
+      <div class="ysc-alert ysc-alert-info">
+        Yahoo!ショッピングでは注文データと商品明細データが別ファイルで出力されます。両方のファイルをダウンロードできます。
+      </div>
+
+      <!-- タブ -->
+      <div class="ysc-tabs">
+        <a href="#" class="ysc-tab active" id="tab-order">注文データ</a>
+        <a href="#" class="ysc-tab" id="tab-item">商品明細データ</a>
+        <a href="#" class="ysc-tab" id="tab-both">一括ダウンロード</a>
+      </div>
+
+      <!-- 条件設定 -->
+      <div class="ysc-card">
+        <div class="ysc-card-header">ダウンロード条件</div>
+        <div class="ysc-card-body">
+          <div class="ysc-form-row">
+            <div class="ysc-form-group">
+              <label for="select-date-range">期間指定</label>
+              <select id="select-date-range" class="ysc-select" data-rpa-field="date-range">
+                <option value="today">本日</option>
+                <option value="yesterday">昨日</option>
+                <option value="week" selected>過去7日間</option>
+                <option value="month">過去30日間</option>
+                <option value="custom">カスタム期間</option>
+              </select>
+            </div>
+            <div class="ysc-form-group">
+              <label for="input-date-from">開始日</label>
+              <input type="date" id="input-date-from" class="ysc-input" data-rpa-field="date-from" disabled>
+            </div>
+            <div class="ysc-form-group">
+              <label for="input-date-to">終了日</label>
+              <input type="date" id="input-date-to" class="ysc-input" data-rpa-field="date-to" disabled>
+            </div>
+          </div>
+
+          <div class="ysc-form-row">
+            <div class="ysc-form-group">
+              <label for="select-payment-status">入金ステータス</label>
+              <select id="select-payment-status" class="ysc-select" data-rpa-field="payment-status">
+                <option value="all">すべて</option>
+                <option value="入金済み">入金済み</option>
+                <option value="未入金">未入金</option>
+                <option value="入金確認中">入金確認中</option>
+              </select>
+            </div>
+            <div class="ysc-form-group">
+              <label for="select-shipping-status">出荷ステータス</label>
+              <select id="select-shipping-status" class="ysc-select" data-rpa-field="shipping-status">
+                <option value="all">すべて</option>
+                <option value="未出荷">未出荷</option>
+                <option value="出荷済み">出荷済み</option>
+              </select>
+            </div>
+            <div class="ysc-form-group">
+              <label for="input-order-count">出力件数</label>
+              <select id="input-order-count" class="ysc-select" data-rpa-field="order-count">
+                <option value="10">10件</option>
+                <option value="20" selected>20件</option>
+                <option value="50">50件</option>
+                <option value="100">100件</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <button class="ysc-btn ysc-btn-primary" id="btn-generate-preview" data-rpa-field="generate-preview" onclick="generatePreview()">
+              プレビュー生成
+            </button>
+            <button class="ysc-btn ysc-btn-outline" id="btn-clear" onclick="clearForm()">
+              クリア
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- プレビュー: 注文データ -->
+      <div class="ysc-card" id="panel-order-preview" style="display: none;">
+        <div class="ysc-card-header">
+          注文データ プレビュー
+          <span class="ysc-count" style="float: right;">
+            <strong id="order-preview-count">0</strong> 件
+          </span>
+        </div>
+        <div class="ysc-card-body">
+          <div class="table-wrapper" style="max-height: 300px; overflow-y: auto;">
+            <table class="ysc-table" id="table-order-preview">
+              <thead>
+                <tr>
+                  <th>注文ID</th>
+                  <th>注文日時</th>
+                  <th>注文者</th>
+                  <th>決済方法</th>
+                  <th>入金状況</th>
+                  <th>合計金額</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-order-preview">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- プレビュー: 商品明細データ -->
+      <div class="ysc-card" id="panel-item-preview" style="display: none;">
+        <div class="ysc-card-header">
+          商品明細データ プレビュー
+          <span class="ysc-count" style="float: right;">
+            <strong id="item-preview-count">0</strong> 件
+          </span>
+        </div>
+        <div class="ysc-card-body">
+          <div class="table-wrapper" style="max-height: 300px; overflow-y: auto;">
+            <table class="ysc-table" id="table-item-preview">
+              <thead>
+                <tr>
+                  <th>注文ID</th>
+                  <th>商品コード</th>
+                  <th>商品名</th>
+                  <th>カテゴリ</th>
+                  <th>単価</th>
+                  <th>数量</th>
+                  <th>小計</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-item-preview">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ダウンロードセクション -->
+      <div class="ysc-download-section" id="download-section" data-status="ready" style="display: none;">
+        <h3>CSVファイルをダウンロード</h3>
+        <p>Yahoo!ショッピング形式で注文データと商品明細データをダウンロードできます。</p>
+        <div class="flex flex-center gap-20 flex-wrap">
+          <button class="ysc-btn ysc-btn-primary ysc-btn-large" id="btn-download-order"
+                  data-rpa-field="download-order" onclick="downloadOrderCSV()">
+            注文データ CSV
+          </button>
+          <button class="ysc-btn ysc-btn-primary ysc-btn-large" id="btn-download-item"
+                  data-rpa-field="download-item" onclick="downloadItemCSV()">
+            商品明細 CSV
+          </button>
+          <button class="ysc-btn ysc-btn-secondary ysc-btn-large" id="btn-download-both"
+                  data-rpa-field="download-both" onclick="downloadBothCSV()">
+            一括ダウンロード
+          </button>
+        </div>
+        <p id="download-status" style="margin-top: 15px; color: #666;" data-rpa-field="download-status"></p>
+      </div>
+
+      <!-- ダウンロード履歴 -->
+      <div class="ysc-card">
+        <div class="ysc-card-header">ダウンロード履歴</div>
+        <div class="ysc-card-body">
+          <table class="ysc-table" id="table-history">
+            <thead>
+              <tr>
+                <th>ダウンロード日時</th>
+                <th>ファイル名</th>
+                <th>データ種別</th>
+                <th>件数</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-history">
+              <tr>
+                <td colspan="4" style="text-align: center; color: #999;">履歴はありません</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="ysc-footer">
+    <p>RPA Practice - Mock Yahoo! Store Creator | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script src="../js/csv-exporter.js"></script>
+  <script>
+    let previewOrders = [];
+    let downloadHistory = [];
+    let currentTab = 'order';
+
+    // 期間選択の変更
+    document.getElementById('select-date-range').addEventListener('change', function() {
+      const isCustom = this.value === 'custom';
+      document.getElementById('input-date-from').disabled = !isCustom;
+      document.getElementById('input-date-to').disabled = !isCustom;
+    });
+
+    // タブ切り替え
+    document.querySelectorAll('.ysc-tab').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.ysc-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentTab = this.id.replace('tab-', '');
+      });
+    });
+
+    // プレビュー生成
+    function generatePreview() {
+      const count = parseInt(document.getElementById('input-order-count').value);
+      const paymentStatus = document.getElementById('select-payment-status').value;
+      const shippingStatus = document.getElementById('select-shipping-status').value;
+
+      previewOrders = [];
+      for (let i = 0; i < count; i++) {
+        const order = DataGenerator.generateYahooOrder();
+
+        if (paymentStatus !== 'all') {
+          order.paymentStatus = paymentStatus;
+        }
+        if (shippingStatus !== 'all') {
+          order.status = shippingStatus === '出荷済み' ? '発送済み' : '処理中';
+        }
+
+        previewOrders.push(order);
+      }
+
+      // 注文データプレビュー
+      const orderTbody = document.getElementById('tbody-order-preview');
+      orderTbody.innerHTML = '';
+
+      previewOrders.forEach(order => {
+        const paymentClass = order.paymentStatus === '入金済み' ? 'ysc-status-paid' : 'ysc-status-unpaid';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="order-id">${order.yahooOrderId}</td>
+          <td>${order.orderDate.dateTimeStr}</td>
+          <td>${order.customer.fullName}</td>
+          <td>${order.payment.method}</td>
+          <td><span class="ysc-status ${paymentClass}">${order.paymentStatus}</span></td>
+          <td>¥${order.amounts.total.toLocaleString()}</td>
+        `;
+        orderTbody.appendChild(row);
+      });
+
+      // 商品明細データプレビュー
+      const itemTbody = document.getElementById('tbody-item-preview');
+      itemTbody.innerHTML = '';
+      let itemCount = 0;
+
+      previewOrders.forEach(order => {
+        order.items.forEach(item => {
+          itemCount++;
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="order-id">${order.yahooOrderId}</td>
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>¥${item.price.toLocaleString()}</td>
+            <td>${item.quantity}</td>
+            <td>¥${item.subtotal.toLocaleString()}</td>
+          `;
+          itemTbody.appendChild(row);
+        });
+      });
+
+      document.getElementById('order-preview-count').textContent = previewOrders.length;
+      document.getElementById('item-preview-count').textContent = itemCount;
+
+      document.getElementById('panel-order-preview').style.display = 'block';
+      document.getElementById('panel-item-preview').style.display = 'block';
+      document.getElementById('download-section').style.display = 'block';
+    }
+
+    // フォームクリア
+    function clearForm() {
+      document.getElementById('select-date-range').value = 'week';
+      document.getElementById('select-payment-status').value = 'all';
+      document.getElementById('select-shipping-status').value = 'all';
+      document.getElementById('input-order-count').value = '20';
+      document.getElementById('input-date-from').value = '';
+      document.getElementById('input-date-to').value = '';
+      document.getElementById('input-date-from').disabled = true;
+      document.getElementById('input-date-to').disabled = true;
+
+      previewOrders = [];
+      document.getElementById('panel-order-preview').style.display = 'none';
+      document.getElementById('panel-item-preview').style.display = 'none';
+      document.getElementById('download-section').style.display = 'none';
+    }
+
+    // 注文データCSVダウンロード
+    function downloadOrderCSV() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'ダウンロード準備中...';
+
+      setTimeout(() => {
+        const now = new Date();
+        const filename = `yahoo_orders_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}.csv`;
+
+        CSVExporter.exportYahooOrderCSV(previewOrders, filename);
+        addDownloadHistory(filename, '注文データ', previewOrders.length);
+
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = `${filename} をダウンロードしました`;
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+        }, 3000);
+      }, 500);
+    }
+
+    // 商品明細CSVダウンロード
+    function downloadItemCSV() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'ダウンロード準備中...';
+
+      setTimeout(() => {
+        const now = new Date();
+        const filename = `yahoo_items_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}.csv`;
+
+        CSVExporter.exportYahooItemCSV(previewOrders, filename);
+
+        let itemCount = 0;
+        previewOrders.forEach(o => itemCount += o.items.length);
+        addDownloadHistory(filename, '商品明細', itemCount);
+
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = `${filename} をダウンロードしました`;
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+        }, 3000);
+      }, 500);
+    }
+
+    // 一括ダウンロード
+    function downloadBothCSV() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = '一括ダウンロード中...';
+
+      setTimeout(() => {
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}`;
+
+        CSVExporter.exportYahooOrderCSV(previewOrders, `yahoo_orders_${dateStr}.csv`);
+
+        setTimeout(() => {
+          CSVExporter.exportYahooItemCSV(previewOrders, `yahoo_items_${dateStr}.csv`);
+
+          addDownloadHistory(`yahoo_orders_${dateStr}.csv`, '注文データ', previewOrders.length);
+          let itemCount = 0;
+          previewOrders.forEach(o => itemCount += o.items.length);
+          addDownloadHistory(`yahoo_items_${dateStr}.csv`, '商品明細', itemCount);
+
+          section.setAttribute('data-status', 'success');
+          statusEl.textContent = '2ファイルをダウンロードしました';
+
+          setTimeout(() => {
+            section.setAttribute('data-status', 'ready');
+          }, 3000);
+        }, 500);
+      }, 500);
+    }
+
+    // ダウンロード履歴追加
+    function addDownloadHistory(filename, type, count) {
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+      downloadHistory.unshift({
+        date: dateStr,
+        filename: filename,
+        type: type,
+        count: count
+      });
+
+      if (downloadHistory.length > 10) {
+        downloadHistory.pop();
+      }
+
+      renderHistory();
+    }
+
+    // 履歴描画
+    function renderHistory() {
+      const tbody = document.getElementById('tbody-history');
+
+      if (downloadHistory.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #999;">履歴はありません</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      downloadHistory.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.filename}</td>
+          <td>${item.type}</td>
+          <td>${item.count}件</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>

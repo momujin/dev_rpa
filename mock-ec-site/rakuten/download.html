@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSVダウンロード - RMS</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/rakuten.css">
+</head>
+<body>
+  <header class="rms-header">
+    <div class="rms-header-top">
+      <div class="rms-logo">
+        <div class="rms-logo-icon">R</div>
+        <div>
+          <div class="rms-logo-text">RMS</div>
+          <div class="rms-logo-sub">店舗運営Navi（モック）</div>
+        </div>
+      </div>
+      <div class="rms-user-info">
+        <span>店舗名: テストショップ</span>
+        <span>担当者: 管理者</span>
+        <a href="../index.html" id="link-logout">ログアウト</a>
+      </div>
+    </div>
+    <nav class="rms-nav">
+      <ul>
+        <li><a href="index.html" id="nav-home">ホーム</a></li>
+        <li><a href="orders.html" id="nav-orders">受注管理</a></li>
+        <li><a href="#" id="nav-products">商品管理</a></li>
+        <li><a href="#" id="nav-inventory">在庫管理</a></li>
+        <li><a href="download.html" class="active" id="nav-download">データ分析</a></li>
+        <li><a href="#" id="nav-settings">店舗設定</a></li>
+      </ul>
+    </nav>
+    <nav class="rms-subnav">
+      <ul>
+        <li><a href="#" id="subnav-report">レポート</a></li>
+        <li><a href="download.html" class="active" id="subnav-csv-download">CSVダウンロード</a></li>
+        <li><a href="#" id="subnav-analysis">分析ツール</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="rms-main" id="main-content" data-status="ready">
+    <aside class="rms-sidebar">
+      <div class="rms-sidebar-title">ダウンロード種別</div>
+      <ul class="rms-sidebar-menu">
+        <li><a href="#" class="active" id="sidebar-order-csv">受注データ</a></li>
+        <li><a href="#" id="sidebar-product-csv">商品データ</a></li>
+        <li><a href="#" id="sidebar-customer-csv">顧客データ</a></li>
+        <li><a href="#" id="sidebar-inventory-csv">在庫データ</a></li>
+      </ul>
+    </aside>
+
+    <div class="rms-content">
+      <h1 class="rms-page-title">受注データ CSVダウンロード</h1>
+
+      <div class="rms-alert rms-alert-info">
+        ダウンロードしたCSVファイルは、販売管理システムへのインポートやRPA操作の練習に使用できます。
+      </div>
+
+      <!-- ダウンロード条件設定 -->
+      <div class="rms-panel">
+        <div class="rms-panel-header">ダウンロード条件</div>
+        <div class="rms-panel-body">
+          <div class="rms-form-row">
+            <div class="rms-form-group">
+              <label for="select-date-range">期間指定</label>
+              <select id="select-date-range" data-rpa-field="date-range">
+                <option value="today">本日</option>
+                <option value="yesterday">昨日</option>
+                <option value="week" selected>過去7日間</option>
+                <option value="month">過去30日間</option>
+                <option value="custom">カスタム期間</option>
+              </select>
+            </div>
+            <div class="rms-form-group">
+              <label for="input-date-from">開始日</label>
+              <input type="date" id="input-date-from" data-rpa-field="date-from" disabled>
+            </div>
+            <div class="rms-form-group">
+              <label for="input-date-to">終了日</label>
+              <input type="date" id="input-date-to" data-rpa-field="date-to" disabled>
+            </div>
+          </div>
+
+          <div class="rms-form-row">
+            <div class="rms-form-group">
+              <label for="select-status">受注ステータス</label>
+              <select id="select-status" data-rpa-field="order-status">
+                <option value="all">すべて</option>
+                <option value="新規受付">新規受付</option>
+                <option value="処理中">処理中</option>
+                <option value="発送準備中">発送準備中</option>
+                <option value="発送済み">発送済み</option>
+                <option value="完了">完了</option>
+              </select>
+            </div>
+            <div class="rms-form-group">
+              <label for="input-order-count">出力件数</label>
+              <select id="input-order-count" data-rpa-field="order-count">
+                <option value="10">10件</option>
+                <option value="20" selected>20件</option>
+                <option value="50">50件</option>
+                <option value="100">100件</option>
+              </select>
+            </div>
+            <div class="rms-form-group">
+              <label for="select-format">出力形式</label>
+              <select id="select-format" data-rpa-field="output-format">
+                <option value="rakuten">楽天RMS形式（約40カラム）</option>
+                <option value="generic">汎用形式（簡易版）</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- プレビュー -->
+      <div class="rms-panel">
+        <div class="rms-panel-header">
+          <span>データプレビュー</span>
+          <button class="rms-btn rms-btn-outline" style="float: right; padding: 5px 15px; font-size: 12px;"
+                  id="btn-refresh-preview" data-rpa-field="refresh-preview" onclick="refreshPreview()">
+            更新
+          </button>
+        </div>
+        <div class="rms-panel-body">
+          <div class="rms-count">
+            プレビュー件数: <strong id="preview-count">0</strong> 件
+          </div>
+          <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+            <table class="rms-table" id="table-preview">
+              <thead>
+                <tr>
+                  <th>楽天注文番号</th>
+                  <th>注文日時</th>
+                  <th>注文者名</th>
+                  <th>商品名</th>
+                  <th>数量</th>
+                  <th>金額</th>
+                  <th>ステータス</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-preview">
+                <!-- JSで動的に生成 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ダウンロードボタン -->
+      <div class="rms-download-section" id="download-section" data-status="ready">
+        <h3>CSVファイルをダウンロード</h3>
+        <p>上記の条件でCSVファイルを生成します。</p>
+        <div class="flex flex-center gap-20">
+          <button class="rms-btn rms-btn-primary btn-large" id="btn-download-csv"
+                  data-rpa-field="download-button" onclick="downloadCSV()">
+            CSVダウンロード
+          </button>
+          <button class="rms-btn rms-btn-secondary btn-large" id="btn-copy-clipboard"
+                  data-rpa-field="copy-button" onclick="copyToClipboard()">
+            クリップボードにコピー
+          </button>
+        </div>
+        <p id="download-status" style="margin-top: 15px; color: #666;" data-rpa-field="download-status"></p>
+      </div>
+
+      <!-- ダウンロード履歴 -->
+      <div class="rms-panel">
+        <div class="rms-panel-header">ダウンロード履歴</div>
+        <div class="rms-panel-body">
+          <table class="rms-table" id="table-history">
+            <thead>
+              <tr>
+                <th>ダウンロード日時</th>
+                <th>ファイル名</th>
+                <th>件数</th>
+                <th>形式</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-history">
+              <tr>
+                <td colspan="4" style="text-align: center; color: #999;">履歴はありません</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="rms-footer">
+    <p>RPA Practice - Mock RMS System | For Training Purposes Only</p>
+  </footer>
+
+  <script src="../js/data-generator.js"></script>
+  <script src="../js/csv-exporter.js"></script>
+  <script>
+    let previewOrders = [];
+    let downloadHistory = [];
+
+    // 期間選択の変更時
+    document.getElementById('select-date-range').addEventListener('change', function() {
+      const isCustom = this.value === 'custom';
+      document.getElementById('input-date-from').disabled = !isCustom;
+      document.getElementById('input-date-to').disabled = !isCustom;
+
+      if (!isCustom) {
+        refreshPreview();
+      }
+    });
+
+    // プレビュー更新
+    function refreshPreview() {
+      const section = document.getElementById('download-section');
+      section.setAttribute('data-status', 'processing');
+
+      const count = parseInt(document.getElementById('input-order-count').value);
+      const status = document.getElementById('select-status').value;
+
+      // ダミーデータ生成
+      previewOrders = [];
+      for (let i = 0; i < count; i++) {
+        const order = DataGenerator.generateRakutenOrder();
+        if (status === 'all' || order.status === status) {
+          previewOrders.push(order);
+        } else {
+          // ステータスを指定されたものに変更
+          order.status = status;
+          previewOrders.push(order);
+        }
+      }
+
+      // テーブル描画
+      const tbody = document.getElementById('tbody-preview');
+      tbody.innerHTML = '';
+
+      previewOrders.forEach(order => {
+        order.items.forEach((item, idx) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${idx === 0 ? order.rakutenOrderId : ''}</td>
+            <td>${idx === 0 ? order.orderDate.dateTimeStr : ''}</td>
+            <td>${idx === 0 ? order.customer.fullName : ''}</td>
+            <td>${item.name}</td>
+            <td>${item.quantity}</td>
+            <td>¥${item.subtotal.toLocaleString()}</td>
+            <td>${idx === 0 ? order.status : ''}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      });
+
+      document.getElementById('preview-count').textContent = previewOrders.length;
+      section.setAttribute('data-status', 'ready');
+    }
+
+    // CSVダウンロード
+    function downloadCSV() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'ダウンロード準備中...';
+
+      setTimeout(() => {
+        const format = document.getElementById('select-format').value;
+        const now = new Date();
+        const filename = `rakuten_orders_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}_${now.getHours().toString().padStart(2,'0')}${now.getMinutes().toString().padStart(2,'0')}.csv`;
+
+        if (format === 'rakuten') {
+          CSVExporter.exportRakutenCSV(previewOrders, filename);
+        } else {
+          CSVExporter.exportGenericCSV(previewOrders, filename);
+        }
+
+        // 履歴追加
+        addDownloadHistory(filename, previewOrders.length, format === 'rakuten' ? '楽天RMS形式' : '汎用形式');
+
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = `${filename} をダウンロードしました`;
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+        }, 3000);
+      }, 500);
+    }
+
+    // クリップボードにコピー
+    function copyToClipboard() {
+      const section = document.getElementById('download-section');
+      const statusEl = document.getElementById('download-status');
+
+      section.setAttribute('data-status', 'processing');
+      statusEl.textContent = 'コピー中...';
+
+      const format = document.getElementById('select-format').value;
+      const csv = CSVExporter.generateCSVString(previewOrders, format === 'rakuten' ? 'rakuten' : 'generic');
+
+      navigator.clipboard.writeText(csv).then(() => {
+        section.setAttribute('data-status', 'success');
+        statusEl.textContent = 'クリップボードにコピーしました';
+
+        setTimeout(() => {
+          section.setAttribute('data-status', 'ready');
+          statusEl.textContent = '';
+        }, 3000);
+      }).catch(err => {
+        section.setAttribute('data-status', 'error');
+        statusEl.textContent = 'コピーに失敗しました';
+      });
+    }
+
+    // ダウンロード履歴追加
+    function addDownloadHistory(filename, count, format) {
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+      downloadHistory.unshift({
+        date: dateStr,
+        filename: filename,
+        count: count,
+        format: format
+      });
+
+      // 履歴は最大5件
+      if (downloadHistory.length > 5) {
+        downloadHistory.pop();
+      }
+
+      renderHistory();
+    }
+
+    // 履歴描画
+    function renderHistory() {
+      const tbody = document.getElementById('tbody-history');
+
+      if (downloadHistory.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #999;">履歴はありません</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      downloadHistory.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.filename}</td>
+          <td>${item.count}件</td>
+          <td>${item.format}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // 初期化
+    document.addEventListener('DOMContentLoaded', refreshPreview);
+  </script>
+</body>
+</html>
