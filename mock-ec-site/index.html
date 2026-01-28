@@ -108,6 +108,38 @@
       font-size: 12px;
     }
 
+    .site-card.sales .logo {
+      background: #2563EB;
+      color: white;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 18px;
+      margin: 40px 0 20px 0;
+      opacity: 0.9;
+    }
+
+    .full-width-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+      color: white;
+    }
+
+    .full-width-card h2,
+    .full-width-card p {
+      color: white;
+    }
+
+    .full-width-card p {
+      opacity: 0.9;
+    }
+
+    .full-width-card .badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
     footer {
       position: fixed;
       bottom: 20px;
@@ -144,6 +176,13 @@
         <h2>Yahoo!ストアクリエイター</h2>
         <p>Yahoo!ショッピングの店舗管理ツール風インターフェース</p>
         <span class="badge">注文+商品2ファイル</span>
+      </a>
+
+      <a href="sales-management/index.html" class="site-card sales full-width-card" id="link-sales" data-rpa-field="sales-link">
+        <div class="logo">販</div>
+        <h2>販売管理システム（ブラウザ版）</h2>
+        <p>ECサイトからダウンロードしたCSVをインポートし、注文データを管理するシステム。RPA転記練習の転記先として使用します。</p>
+        <span class="badge">注文入力・CSVインポート・データ管理</span>
       </a>
     </div>
   </div>

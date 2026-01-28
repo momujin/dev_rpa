@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>販売管理システム（ブラウザ版）</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="app-container" id="app-container" data-status="ready">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="app-logo">
+        <div class="app-logo-icon">販</div>
+        <span class="app-logo-text">販売管理システム</span>
+        <span class="app-badge">Web版</span>
+      </div>
+      <div class="app-header-actions">
+        <span id="header-date"></span>
+        <span id="header-order-count">登録件数: 0件</span>
+        <a href="../index.html" class="header-link">ECサイトへ</a>
+      </div>
+    </header>
+
+    <!-- メイン -->
+    <main class="app-main">
+      <!-- サイドバー -->
+      <aside class="app-sidebar">
+        <nav class="sidebar-nav">
+          <a class="sidebar-nav-item active" id="nav-list" data-screen="list" data-rpa-field="nav-list">
+            <span class="icon">📋</span>
+            <span>注文一覧</span>
+          </a>
+          <a class="sidebar-nav-item" id="nav-input" data-screen="input" data-rpa-field="nav-input">
+            <span class="icon">✏️</span>
+            <span>注文入力</span>
+          </a>
+          <a class="sidebar-nav-item" id="nav-import" data-screen="import" data-rpa-field="nav-import">
+            <span class="icon">📥</span>
+            <span>CSVインポート</span>
+          </a>
+          <a class="sidebar-nav-item" id="nav-export" data-screen="export" data-rpa-field="nav-export">
+            <span class="icon">📤</span>
+            <span>データエクスポート</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <p>RPA練習用システム</p>
+          <p>Version 1.0.0 (Web)</p>
+        </div>
+      </aside>
+
+      <!-- コンテンツ -->
+      <div class="app-content">
+        <!-- 注文一覧画面 -->
+        <div class="screen active" id="screen-list">
+          <div class="page-title">
+            <span>注文一覧</span>
+            <button class="btn btn-primary" id="btn-new-order" data-rpa-field="new-order-button" onclick="showScreen('input')">
+              + 新規注文入力
+            </button>
+          </div>
+
+          <!-- 統計カード -->
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-total">0</div>
+              <div class="stat-card-label">総注文数</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-today">0</div>
+              <div class="stat-card-label">本日の注文</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-processing">0</div>
+              <div class="stat-card-label">処理中</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-total-amount">¥0</div>
+              <div class="stat-card-label">売上合計</div>
+            </div>
+          </div>
+
+          <!-- 検索 -->
+          <div class="search-box">
+            <div class="form-row form-row-4">
+              <div class="form-group">
+                <label class="form-label" for="search-order-id">注文番号</label>
+                <input type="text" class="form-control" id="search-order-id" data-rpa-field="search-order-id" placeholder="注文番号を入力">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="search-customer">顧客名</label>
+                <input type="text" class="form-control" id="search-customer" data-rpa-field="search-customer" placeholder="顧客名を入力">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="search-status">ステータス</label>
+                <select class="form-control" id="search-status" data-rpa-field="search-status">
+                  <option value="">すべて</option>
+                  <option value="新規受付">新規受付</option>
+                  <option value="処理中">処理中</option>
+                  <option value="発送済み">発送済み</option>
+                  <option value="完了">完了</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="search-ec-site">ECサイト</label>
+                <select class="form-control" id="search-ec-site" data-rpa-field="search-ec-site">
+                  <option value="">すべて</option>
+                  <option value="楽天">楽天</option>
+                  <option value="Amazon">Amazon</option>
+                  <option value="Yahoo">Yahoo</option>
+                  <option value="その他">その他</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex gap-10">
+              <button class="btn btn-primary" id="btn-search" data-rpa-field="search-button" onclick="searchOrders()">検索</button>
+              <button class="btn btn-outline" id="btn-clear-search" onclick="clearSearch()">クリア</button>
+            </div>
+          </div>
+
+          <!-- 一覧テーブル -->
+          <div class="card">
+            <div class="card-header">
+              <span>検索結果: <strong id="result-count">0</strong>件</span>
+              <div class="flex gap-10">
+                <button class="btn btn-small btn-secondary" id="btn-load-sample" onclick="loadSampleData()">サンプルデータ読込</button>
+                <button class="btn btn-small btn-outline" id="btn-delete-all" onclick="deleteAllOrders()">全件削除</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-wrapper">
+                <table class="table" id="table-orders">
+                  <thead>
+                    <tr>
+                      <th>注文番号</th>
+                      <th>注文日</th>
+                      <th>ECサイト</th>
+                      <th>顧客名</th>
+                      <th>商品</th>
+                      <th>合計金額</th>
+                      <th>ステータス</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-orders">
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination" id="pagination">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 注文入力画面 -->
+        <div class="screen" id="screen-input">
+          <div class="page-title">
+            <span id="input-title">新規注文入力</span>
+            <button class="btn btn-outline" onclick="showScreen('list')">← 一覧に戻る</button>
+          </div>
+
+          <form id="form-order" data-status="ready">
+            <!-- 注文情報 -->
+            <div class="card">
+              <div class="card-header">注文情報</div>
+              <div class="card-body">
+                <div class="form-row form-row-3">
+                  <div class="form-group">
+                    <label class="form-label" for="input-order-id">注文番号<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="input-order-id" data-rpa-field="order-id" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-order-date">注文日<span class="required">*</span></label>
+                    <input type="date" class="form-control" id="input-order-date" data-rpa-field="order-date" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-ec-site">ECサイト<span class="required">*</span></label>
+                    <select class="form-control" id="input-ec-site" data-rpa-field="ec-site" required>
+                      <option value="">選択してください</option>
+                      <option value="楽天">楽天</option>
+                      <option value="Amazon">Amazon</option>
+                      <option value="Yahoo">Yahoo</option>
+                      <option value="その他">その他</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row form-row-2">
+                  <div class="form-group">
+                    <label class="form-label" for="input-status">ステータス</label>
+                    <select class="form-control" id="input-status" data-rpa-field="status">
+                      <option value="新規受付">新規受付</option>
+                      <option value="処理中">処理中</option>
+                      <option value="発送済み">発送済み</option>
+                      <option value="完了">完了</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-payment-method">決済方法</label>
+                    <select class="form-control" id="input-payment-method" data-rpa-field="payment-method">
+                      <option value="">選択してください</option>
+                      <option value="クレジットカード">クレジットカード</option>
+                      <option value="代金引換">代金引換</option>
+                      <option value="コンビニ決済">コンビニ決済</option>
+                      <option value="銀行振込">銀行振込</option>
+                      <option value="PayPay">PayPay</option>
+                      <option value="その他">その他</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 顧客情報 -->
+            <div class="card">
+              <div class="card-header">顧客情報</div>
+              <div class="card-body">
+                <div class="form-row form-row-2">
+                  <div class="form-group">
+                    <label class="form-label" for="input-customer-name">顧客名<span class="required">*</span></label>
+                    <input type="text" class="form-control" id="input-customer-name" data-rpa-field="customer-name" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-customer-kana">顧客名（カナ）</label>
+                    <input type="text" class="form-control" id="input-customer-kana" data-rpa-field="customer-kana">
+                  </div>
+                </div>
+                <div class="form-row form-row-3">
+                  <div class="form-group">
+                    <label class="form-label" for="input-postal-code">郵便番号</label>
+                    <input type="text" class="form-control" id="input-postal-code" data-rpa-field="postal-code" placeholder="123-4567">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-phone">電話番号</label>
+                    <input type="tel" class="form-control" id="input-phone" data-rpa-field="phone" placeholder="03-1234-5678">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-email">メールアドレス</label>
+                    <input type="email" class="form-control" id="input-email" data-rpa-field="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="input-address">住所<span class="required">*</span></label>
+                  <input type="text" class="form-control" id="input-address" data-rpa-field="address" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- 商品情報 -->
+            <div class="card">
+              <div class="card-header">
+                <span>商品情報</span>
+                <button type="button" class="btn btn-small btn-primary" id="btn-add-item" data-rpa-field="add-item" onclick="addItemRow()">+ 商品追加</button>
+              </div>
+              <div class="card-body">
+                <div id="items-container">
+                  <!-- 商品行はJSで動的に追加 -->
+                </div>
+                <div class="item-row item-row-total">
+                  <div></div>
+                  <div class="text-right">小計</div>
+                  <div></div>
+                  <div></div>
+                  <div id="display-subtotal">¥0</div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 金額情報 -->
+            <div class="card">
+              <div class="card-header">金額情報</div>
+              <div class="card-body">
+                <div class="form-row form-row-4">
+                  <div class="form-group">
+                    <label class="form-label" for="input-shipping-fee">送料</label>
+                    <input type="number" class="form-control" id="input-shipping-fee" data-rpa-field="shipping-fee" value="0" min="0" onchange="calculateTotal()">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-tax">消費税</label>
+                    <input type="number" class="form-control" id="input-tax" data-rpa-field="tax" value="0" min="0" onchange="calculateTotal()">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-discount">割引</label>
+                    <input type="number" class="form-control" id="input-discount" data-rpa-field="discount" value="0" min="0" onchange="calculateTotal()">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="input-total">合計金額</label>
+                    <input type="number" class="form-control input-total" id="input-total" data-rpa-field="total" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 送信ボタン -->
+            <div class="flex flex-between mt-20">
+              <button type="button" class="btn btn-outline" onclick="clearForm()">フォームをクリア</button>
+              <div class="flex gap-10">
+                <button type="button" class="btn btn-secondary" onclick="showScreen('list')">キャンセル</button>
+                <button type="submit" class="btn btn-success btn-large" id="btn-save" data-rpa-field="save-button">
+                  保存する
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- CSVインポート画面 -->
+        <div class="screen" id="screen-import">
+          <div class="page-title">
+            <span>CSVインポート</span>
+          </div>
+
+          <div class="message message-info">
+            楽天RMS、Amazonセラーセントラル、Yahoo!ストアクリエイターからダウンロードしたCSVファイルをインポートできます。
+          </div>
+
+          <div class="card" data-status="ready" id="import-card">
+            <div class="card-header">CSVファイル選択</div>
+            <div class="card-body">
+              <div class="form-row form-row-2">
+                <div class="form-group">
+                  <label class="form-label" for="select-import-format">インポート形式</label>
+                  <select class="form-control" id="select-import-format" data-rpa-field="import-format">
+                    <option value="generic">汎用形式</option>
+                    <option value="rakuten">楽天RMS形式</option>
+                    <option value="amazon">Amazon形式</option>
+                    <option value="yahoo">Yahoo形式</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">ファイル選択</label>
+                  <div class="file-input-wrapper">
+                    <input type="file" id="input-csv-file" data-rpa-field="csv-file" accept=".csv" onchange="handleFileSelect(event)">
+                    <label for="input-csv-file" class="btn btn-primary file-input-label">
+                      ファイルを選択
+                    </label>
+                    <span id="file-name" class="file-name">ファイルが選択されていません</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-20">
+                <button class="btn btn-success btn-large" id="btn-import" data-rpa-field="import-button" onclick="importCSV()" disabled>
+                  インポート実行
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- インポート結果 -->
+          <div class="card" id="import-result-card" style="display: none;">
+            <div class="card-header">インポート結果</div>
+            <div class="card-body">
+              <div class="import-result" id="import-result">
+              </div>
+            </div>
+          </div>
+
+          <!-- プレビュー -->
+          <div class="card" id="preview-card" style="display: none;">
+            <div class="card-header">
+              プレビュー
+              <span id="preview-count">0件</span>
+            </div>
+            <div class="card-body">
+              <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+                <table class="table" id="table-preview">
+                  <thead id="thead-preview">
+                  </thead>
+                  <tbody id="tbody-preview">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- データエクスポート画面 -->
+        <div class="screen" id="screen-export">
+          <div class="page-title">
+            <span>データエクスポート</span>
+          </div>
+
+          <div class="card">
+            <div class="card-header">エクスポート設定</div>
+            <div class="card-body">
+              <div class="form-row form-row-2">
+                <div class="form-group">
+                  <label class="form-label" for="export-format">出力形式</label>
+                  <select class="form-control" id="export-format" data-rpa-field="export-format">
+                    <option value="csv">CSV形式</option>
+                    <option value="json">JSON形式</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="export-range">出力範囲</label>
+                  <select class="form-control" id="export-range" data-rpa-field="export-range">
+                    <option value="all">全件</option>
+                    <option value="filtered">検索結果のみ</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mt-20">
+                <button class="btn btn-primary btn-large" id="btn-export" data-rpa-field="export-button" onclick="exportData()">
+                  エクスポート実行
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">データ管理</div>
+            <div class="card-body">
+              <p class="mb-10">ブラウザのLocalStorageにデータが保存されています。</p>
+              <div class="flex gap-10">
+                <button class="btn btn-outline" onclick="backupData()">バックアップ（JSON）</button>
+                <button class="btn btn-outline" onclick="document.getElementById('restore-file').click()">復元</button>
+                <input type="file" id="restore-file" accept=".json" style="display: none;" onchange="restoreData(event)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 注文詳細モーダル -->
+  <div class="modal-overlay" id="modal-order-detail">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>注文詳細</h3>
+        <button class="modal-close" onclick="closeModal('modal-order-detail')">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body-detail">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-order-detail')">閉じる</button>
+        <button class="btn btn-primary" id="btn-modal-edit" onclick="editOrder()">編集</button>
+        <button class="btn btn-danger" id="btn-modal-delete" onclick="deleteOrder()">削除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 保存完了通知 -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span class="toast-message" id="toast-message">保存しました</span>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
